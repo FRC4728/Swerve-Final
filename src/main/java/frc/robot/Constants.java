@@ -61,7 +61,7 @@ public final class Constants {
         public static final double closedLoopRamp = 1;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = chosenModule.angleKP;
+        public static final double angleKP = .1;
         public static final double angleKI = chosenModule.angleKI;
         public static final double angleKD = chosenModule.angleKD;
         public static final double angleKF = chosenModule.angleKF;
