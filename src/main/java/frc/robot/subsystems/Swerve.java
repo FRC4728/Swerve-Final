@@ -30,19 +30,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
 
-    private PhotonVisionSubsystem vision1;
+//    private PhotonVisionSubsystem vision1;
     public SwerveDriveOdometry swerveOdometry;
     public SwerveDrivePoseEstimator poseEstimator;
     public SwerveModule[] mSwerveMods;
-    public PigeonIMU gyro;
+    public Pigeon2 gyro;
 
-    private static final edu.wpi.first.math.Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0, 0, 0);
+   // private static final edu.wpi.first.math.Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0, 0, 0);
 
     private static final edu.wpi.first.math.Vector<N3> driveMeasurementStdDevs = VecBuilder.fill(0, 0, 0);
 
-    public Swerve(PhotonVisionSubsystem vision1) {
-        this.vision1 = vision1; 
-        gyro = new PigeonIMU(Constants.Swerve.pigeonID);
+    public Swerve(){//(PhotonVisionSubsystem vision1) {
+   //     this.vision1 = vision1; 
+        gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
 
@@ -67,7 +67,7 @@ public class Swerve extends SubsystemBase {
         } catch (Exception e) {
         }
     }).start();
-         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d(0, 0, new Rotation2d(0)), driveMeasurementStdDevs, visionMeasurementStdDevs);
+         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d(0, 0, new Rotation2d(0)));//, driveMeasurementStdDevs);// visionMeasurementStdDevs);
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
         
     }
@@ -143,7 +143,7 @@ public class Swerve extends SubsystemBase {
         // -- on
         // a real robot, this must be calculated based either on latency or timestamps.
 
-        Optional<EstimatedRobotPose> result =
+  /*       Optional<EstimatedRobotPose> result =
                vision1.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
 
 
@@ -152,7 +152,7 @@ public class Swerve extends SubsystemBase {
             poseEstimator.addVisionMeasurement(
                     camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
        
-    }
+    }*/
 }
     @Override
     public void periodic(){

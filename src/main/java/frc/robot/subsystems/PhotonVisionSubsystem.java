@@ -29,12 +29,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PhotonVisionSubsystem extends SubsystemBase {
+public class PhotonVisionSubsystem extends SubsystemBase {}
   // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   // public static RobotPoseEstimator robotPoseEstimator;
 
   // Location of all april tags on field, check if id is correct
-
+/* 
   final AprilTag tag01 = new AprilTag(
       1,
       new Pose3d(
@@ -223,3 +223,4 @@ distanceMeters, Rotation2d.fromDegrees(-target.getYaw()));
     // This method will be called once per scheduler run during simulation
   }
 }
+*/

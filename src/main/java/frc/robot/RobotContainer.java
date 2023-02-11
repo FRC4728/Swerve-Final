@@ -59,8 +59,8 @@ public class RobotContainer {
 
     /* Subsystems */
  
-    private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem();
-    private final Swerve s_Swerve = new Swerve(s_Vision);
+   // private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem();
+    private final Swerve s_Swerve = new Swerve();//(s_Vision);
     private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 
@@ -73,9 +73,9 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis)
+                () -> -driver.getRawAxis(translationAxis), //* -driver.getRawAxis(translationAxis), 
+                () ->-driver.getRawAxis(strafeAxis),// * -driver.getRawAxis(strafeAxis), 
+                () -> -driver.getRawAxis(rotationAxis)// *  -driver.getRawAxis(rotationAxis)
             )
         );
 
@@ -98,9 +98,9 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
+       // See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-            Teleop1.onTrue(ramseteTeleopCommand(new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
+          //  Teleop1.onTrue(ramseteTeleopCommand(new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 
     }
 
@@ -180,7 +180,7 @@ public Command AutoTemplate() {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(interiorQuinticWaypoints, config);
     return trajectory;
   }
-
+/* 
   // Teleop Ramsete Builder: creates paths and follows them
   Command ramseteTeleopCommand(Pose2d targetPose2d) {
     TrajectoryConfig config =
@@ -212,7 +212,7 @@ public Command AutoTemplate() {
                 List.of(new Translation2d(.5, .5), new Translation2d(1, 1)),
                 // End 3 meters straight ahead of where we started, facing forward
                 new Pose2d(2, 0, new Rotation2d(0)),
-                config);*/
+                config);
            //     Trajectory exampleTrajectory =
           //  TrajectoryGenerator.generateTrajectory(
          //     interiorQuinticWaypoints,
@@ -240,5 +240,5 @@ public Command AutoTemplate() {
            new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(s_Vision.CameraGet(), s_Swerve.getYaw()))),
             swerveControllerCommand
         );
-    }
+    }*/
 }

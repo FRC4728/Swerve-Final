@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ArmSubsytem {
-    public class DriveSubsystem extends SubsystemBase {
+public class ArmSubsytem {}
+ /*    public class DriveSubsystem extends SubsystemBase {
         // The motors on the left side of the drive.
          
         CANSparkMax m_ArmMaster = new CANSparkMax(61, MotorType.kBrushless);
@@ -118,3 +118,4 @@ public class ArmSubsytem {
         }
     }
 }
+ */
