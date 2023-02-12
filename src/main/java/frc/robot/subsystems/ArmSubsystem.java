@@ -2,31 +2,34 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAlternateEncoder.Type;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ArmSubsytem {}
- /*    public class DriveSubsystem extends SubsystemBase {
+public class ArmSubsystem {
+     public class DriveSubsystem extends SubsystemBase {
         // The motors on the left side of the drive.
          
         CANSparkMax m_ArmMaster = new CANSparkMax(61, MotorType.kBrushless);
         CANSparkMax m_ArmExtend = new CANSparkMax(60, MotorType.kBrushless);
-        
+
         private final DoubleSolenoid m_doubleSolenoid = 
             new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
       
         private SparkMaxPIDController m_PIDControllerActuate;
         private SparkMaxPIDController m_PIDControllerExtend;
 
-        private RelativeEncoder m_encoderActuate;
         private RelativeEncoder m_encoderExtend;
+        RelativeEncoder m_encoderActuate;
+
 
         public double maxVel, maxAcc;
 
@@ -46,8 +49,10 @@ public class ArmSubsytem {}
 
             resetEncoders ();
 
-            m_encoderActuate = m_ArmMaster.getEncoder();
+            m_encoderActuate = m_ArmMaster.getAlternateEncoder(Type.kQuadrature,0);
             m_encoderExtend = m_ArmExtend.getEncoder();
+
+            
 
             m_ArmMaster.set(0);
             m_ArmExtend.set(0);
@@ -64,7 +69,7 @@ public class ArmSubsytem {}
             m_PIDControllerActuate = m_ArmMaster.getPIDController();
             m_PIDControllerExtend = m_ArmExtend.getPIDController();
 
-            m_PIDControllerActuate.setP(Constants.gains.kArmGains.kP);
+          /*   m_PIDControllerActuate.setP(Constants.gains.kArmGains.kP);
             m_PIDControllerActuate.setI(Constants.gains.kArmGains.kI);
             m_PIDControllerActuate.setD(Constants.gains.kArmGains.kD);
             m_PIDControllerActuate.setFF(Constants.gains.kArmGains.kF);
@@ -73,7 +78,7 @@ public class ArmSubsytem {}
             m_PIDControllerExtend.setI(Constants.gains.kArmExtend.kI);
             m_PIDControllerExtend.setD(Constants.gains.kArmExtend.kD);
             m_PIDControllerExtend.setFF(Constants.gains.kArmExtend.kF);
-
+/* */
             maxVel = 5676;
             maxAcc = 5676;
 
@@ -118,4 +123,3 @@ public class ArmSubsytem {}
         }
     }
 }
- */
