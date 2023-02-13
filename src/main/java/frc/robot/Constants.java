@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import frc.robot.Gains;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -149,4 +150,8 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+    public static final Gains kArmGains = new Gains(5e-5, 1e-6, 0.0, 0.000156, 0, 1.0);
+
+    public static final Gains kArmExtendGains = new Gains(0.15, 0.0, 1.0, 0.0, 0, 1.0);
+
 }
