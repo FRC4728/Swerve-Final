@@ -53,14 +53,15 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, 2);
-    private final JoystickButton Teleop1 = new JoystickButton(driver, 3);
+    //private final JoystickButton Teleop1 = new JoystickButton(driver, 4);
     private final JoystickButton See = new JoystickButton(driver, 1);
+    private final JoystickButton Slowly = new JoystickButton(driver, 3);
 
 
     /* Subsystems */
  
-   // private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem();
     private final Swerve s_Swerve = new Swerve();//(s_Vision);
+    private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem(s_Swerve);
     private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 
@@ -75,7 +76,8 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), //* -driver.getRawAxis(translationAxis), 
                 () ->-driver.getRawAxis(strafeAxis),// * -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis)// *  -driver.getRawAxis(rotationAxis)
+                () -> -driver.getRawAxis(rotationAxis),
+                () ->  Slowly.getAsBoolean()
             )
         );
 
@@ -98,7 +100,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-       // See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
+        See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
           //  Teleop1.onTrue(ramseteTeleopCommand(new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 

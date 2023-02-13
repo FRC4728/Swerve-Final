@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class SwerveModule {
     public int moduleNumber;
+    private double WheelTurnSpeed;
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
 
@@ -47,25 +48,53 @@ public class SwerveModule {
         lastAngle = getState().angle;
     }
 
-    public void setDesiredState(SwerveModuleState desiredState){
+    public void setDesiredState(SwerveModuleState desiredState, boolean quickTurn){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
         desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
-        setAngle(desiredState);
-        setSpeed(desiredState);
+        setAngle(desiredState, quickTurn);
+        setSpeed(desiredState, quickTurn);
     }
 
-    private void setSpeed(SwerveModuleState desiredState){
-     
-            double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
-            mDriveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
+    private void setSpeed(SwerveModuleState desiredState, boolean quickTurn){
+     SmartDashboard.putBoolean("quickTurn", quickTurn);
+     //  if (quickTurn == false) {
+
         
+     //      double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
+      //      mDriveMotor.set(ControlMode.Velocity, velocity / 4, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
+  //  }
+  //  else{
+        
+        double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
+        mDriveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
+    //}
     }
 
-    private void setAngle(SwerveModuleState desiredState){
-        Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+    private void setAngle(SwerveModuleState desiredState, boolean quickTurn){
+      //  if (quickTurn == true & WheelTurnSpeed == 4000){
+     //       WheelTurnSpeed = 10000;
+    //        mAngleMotor.configMotionAcceleration(10000);
+    //        mAngleMotor.configMotionCruiseVelocity(20000);
+    //    }
+    //    else if ( quickTurn = false & WheelTurnSpeed == 10000){
+    //        WheelTurnSpeed = 4000;
+            
+    //    mAngleMotor.configMotionAcceleration(2000);
+    //    mAngleMotor.configMotionCruiseVelocity(4000);
+
+        if(Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 5000){
+           Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
-        mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-        lastAngle = angle;
+            mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+            lastAngle = angle;
+        }
+        else{
+            Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        
+            mAngleMotor.set(ControlMode.MotionMagic, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+            lastAngle = angle;
+       }
+
     }
 
     private Rotation2d getAngle(){
@@ -94,6 +123,9 @@ public class SwerveModule {
     private void configAngleMotor(){
         mAngleMotor.configFactoryDefault();
         mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
+        mAngleMotor.configMotionAcceleration(2000,30);
+        mAngleMotor.configMotionCruiseVelocity(4000);
+        mAngleMotor.configMotionSCurveStrength(1);
         mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
         mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
         resetToAbsolute();

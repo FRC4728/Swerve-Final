@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -29,12 +30,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PhotonVisionSubsystem extends SubsystemBase {}
-  // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+public class PhotonVisionSubsystem extends SubsystemBase {
+   // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   // public static RobotPoseEstimator robotPoseEstimator;
 
   // Location of all april tags on field, check if id is correct
-/* 
+
   final AprilTag tag01 = new AprilTag(
       1,
       new Pose3d(
@@ -107,12 +108,15 @@ public class PhotonVisionSubsystem extends SubsystemBase {}
   // cameraName is actual name of camera, not nickname
   PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
   // where cam is on robot
-  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, Units.inchesToMeters(7.25)),
+  Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, Units.inchesToMeters(3)),
       new Rotation3d(0, 0, 0));
 
   PhotonPoseEstimator poseEstimator;
+   private Swerve drive1;
 
-  public PhotonVisionSubsystem() {
+  public PhotonVisionSubsystem(Swerve drive1) {
+          this.drive1 = drive1; 
+
     // worthless for now, but sets up an entire field for pose estimation
     ArrayList<AprilTag> aprilTags = new ArrayList<AprilTag>();
     aprilTags.add(tag01);
@@ -181,22 +185,27 @@ var apriltagRotate = apriltaglocations[index].getRotation();
 
 //currenTag[targetID] = new AprilTag(targetID, new Pose3d(apriltagX, apriltagY, apriltagZ, apriltagRotate));
     
-    
 
   double distanceMeters =
 PhotonUtils.calculateDistanceToTargetMeters(
-        Units.inchesToMeters(7.25),
-       apriltagZ,
-        0,
+        Units.inchesToMeters(42.5),
+       Units.inchesToMeters(18.22),
+       Units.degreesToRadians(-33),
         Units.degreesToRadians(target.getPitch()));
 
+     //   PhotonUtils.estimateFieldToRobot(null, null, null);
         //finds translation to target for trajectory generation
  Translation2d translation = PhotonUtils.estimateCameraToTargetTranslation(
 distanceMeters, Rotation2d.fromDegrees(-target.getYaw()));
    
-           SmartDashboard.putString ("Translation to target", translation.toString());
+           SmartDashboard.putString ("Translation to target", new Translation2d(Units.metersToInches(translation.getX()), Units.metersToInches(translation.getY())).toString());
            SmartDashboard.putNumber("Distance To Target", distanceMeters);
           
+        //  Transform2d cameratotarget = PhotonUtils.estimateCameraToTarget(translation, new Pose2d(apriltagX, apriltagY, new Rotation2d(0))
+        //   , new Rotation2d(drive1.getTheta()));
+
+            
+//SmartDashboard.putString("cameratotarget", cameratotarget.toString());
           if (apriltagX < 7.62){
             SmartDashboard.putString ("New RobotPose",  new Translation2d(Units.metersToInches( apriltagX + translation.getX()),Units.metersToInches( apriltagY + translation.getY())).toString());
           return new Translation2d(apriltagX + translation.getX(),apriltagY + translation.getY());
@@ -223,4 +232,3 @@ distanceMeters, Rotation2d.fromDegrees(-target.getYaw()));
     // This method will be called once per scheduler run during simulation
   }
 }
-*/
