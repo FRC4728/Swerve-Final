@@ -6,6 +6,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -16,6 +17,7 @@ import frc.robot.Constants;
         // The motors on the left side of the drive.
          
         CANSparkMax m_ArmMaster = new CANSparkMax(61, MotorType.kBrushless);
+        CANSparkMax m_ArmFollower = new CANSparkMax(62, MotorType.kBrushless);
         CANSparkMax m_ArmExtend = new CANSparkMax(60, MotorType.kBrushless);
         
         private final DoubleSolenoid m_doubleSolenoid = 
@@ -41,21 +43,25 @@ import frc.robot.Constants;
 
         
 
-        public void ArmSubsystem() {
+        public ArmSubsystem() {
 
             resetEncoders ();
 
-            m_encoderActuate = m_ArmMaster.getEncoder();
+            m_encoderActuate = m_ArmMaster.getEncoder(Type.kQuadrature, 406);
             m_encoderExtend = m_ArmExtend.getEncoder();
+            
 
             m_ArmMaster.set(0);
             m_ArmExtend.set(0);
+            m_ArmFollower.set(0);
 
             m_ArmMaster.restoreFactoryDefaults();
             m_ArmExtend.restoreFactoryDefaults();
+            m_ArmFollower.restoreFactoryDefaults();
 
             m_ArmMaster.setInverted(false);
             m_ArmExtend.setInverted(false);
+            
 
             m_ArmMaster.setIdleMode(IdleMode.kBrake);
             m_ArmExtend.setIdleMode(IdleMode.kBrake);
@@ -72,7 +78,7 @@ import frc.robot.Constants;
             m_PIDControllerExtend.setI(Constants.kArmExtendGains.kI);
             m_PIDControllerExtend.setD(Constants.kArmExtendGains.kD);
             m_PIDControllerExtend.setFF(Constants.kArmExtendGains.kF);
-
+            
             maxVel = 5676;
             maxAcc = 5676;
 
@@ -80,26 +86,32 @@ import frc.robot.Constants;
             m_PIDControllerActuate.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
             m_PIDControllerActuate.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
 
-           
+            m_ArmFollower.follow(m_ArmMaster);
             
         }
 
-        public void ActuateUp(double joystickButton3){
+        public void ActuateUp(){
         
-            m_PIDControllerActuate.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-            processVariable = m_encoderActuate.getVelocity();
+            m_PIDControllerActuate.setReference(90, CANSparkMax.ControlType.kSmartMotion);
+           // processVariable = m_encoderActuate.getVelocity();
         }
 
-        public void ActuateRest(double joystickButton4){
+        public void ActuateRest(){
         
-            m_PIDControllerActuate.setReference(setPoint2, CANSparkMax.ControlType.kVelocity);
-            processVariable = m_encoderActuate.getVelocity();
+            m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+          //  processVariable = m_encoderActuate.getVelocity();
         }
 
-        public void Extend(double joystickButton5, double joystickButton6){
-            m_PIDControllerExtend.setReference(joystickButton5, ControlType.kDutyCycle);
-            m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
+        public void Extend(){
+            m_PIDControllerExtend.setReference(1, ControlType.kPosition);
+         //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
+
+        public void Retract(){
+            m_PIDControllerExtend.setReference(0, ControlType.kPosition);
+         //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
+        }
+
 
          public void resetEncoders(){
              m_encoderActuate.setPosition(0);

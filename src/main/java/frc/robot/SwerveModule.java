@@ -17,7 +17,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class SwerveModule {
     public int moduleNumber;
-    private double WheelTurnSpeed;
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
 

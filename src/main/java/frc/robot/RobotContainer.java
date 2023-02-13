@@ -52,17 +52,30 @@ public class RobotContainer {
     private final int rotationAxis = 2;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, 2);
+    private final JoystickButton c_zeroGyro = new JoystickButton(driver, 2);
     //private final JoystickButton Teleop1 = new JoystickButton(driver, 4);
-    private final JoystickButton See = new JoystickButton(driver, 1);
-    private final JoystickButton Slowly = new JoystickButton(driver, 3);
+    private final JoystickButton c_See = new JoystickButton(driver, 1);
+
+    private final JoystickButton c_Slowly = new JoystickButton(driver, 3);
+
+    private final JoystickButton c_ArmUp = new JoystickButton(driver, 6);
+    private final JoystickButton c_ArmRest = new JoystickButton(driver, 5);
+    private final JoystickButton c_ArmExtend = new JoystickButton(driver, 8);
+    private final JoystickButton c_ArmRetract = new JoystickButton(driver, 7);    
+
+    private final JoystickButton c_Hop = new JoystickButton(driver, 4);
+
 
 
     /* Subsystems */
  
     private final Swerve s_Swerve = new Swerve();//(s_Vision);
-    private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem(s_Swerve);
+    private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem();
+    private final ArmSubsystem s_Arm = new ArmSubsystem();
+    private final HopperSubsystem s_Hopper = new HopperSubsystem();
+
     private final SendableChooser<Command> m_chooser = new SendableChooser<>();
+  
 
 
     
@@ -77,10 +90,12 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), //* -driver.getRawAxis(translationAxis), 
                 () ->-driver.getRawAxis(strafeAxis),// * -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis),
-                () ->  Slowly.getAsBoolean()
+                () ->  c_Slowly.getAsBoolean()
             )
         );
 
+
+        
 
           m_chooser.setDefaultOption("Auto1", new Auto1(s_Swerve));
  //    m_chooser.addOption("Complex Auto", m_complexAuto);
@@ -100,8 +115,17 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        c_See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
+
+        c_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+        c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
+        c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
+        c_ArmExtend.onTrue(new ArmExtendCommand(s_Arm));
+        c_ArmRetract.onTrue(new ArmRetractCommand(s_Arm));
+
+        c_Hop.onTrue(new HopCommand(s_Hopper));
+
           //  Teleop1.onTrue(ramseteTeleopCommand(new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 
     }

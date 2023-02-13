@@ -11,6 +11,7 @@ public class HopperSubsystem extends SubsystemBase {
 
   public HopperSubsystem() {
 
+    m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
   }
 
   @Override
@@ -19,6 +20,9 @@ public class HopperSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+public void AlternateHopper() {
+    m_doubleSolenoid.toggle();
+}
 
   @Override
   public void simulationPeriodic() {
