@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,13 +10,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
-
+import frc.robot.Constants;
+import frc.robot.Robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class SwerveModule {
     public int moduleNumber;
+    public double RobotSpeed;
     private Rotation2d angleOffset;
     private Rotation2d lastAngle;
 
@@ -80,7 +82,7 @@ public class SwerveModule {
             
     //    mAngleMotor.configMotionAcceleration(2000);
     //    mAngleMotor.configMotionCruiseVelocity(4000);
-
+        RobotSpeed = Math.abs(mDriveMotor.getSelectedSensorVelocity());
         if(Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 5000){
            Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
