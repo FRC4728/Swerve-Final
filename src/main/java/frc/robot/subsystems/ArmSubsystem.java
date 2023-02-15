@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -8,26 +9,32 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 
      public class ArmSubsystem extends SubsystemBase {
         // The motors on the left side of the drive.
          
-        CANSparkMax m_ArmMaster = new CANSparkMax(61, MotorType.kBrushless);
-        CANSparkMax m_ArmFollower = new CANSparkMax(62, MotorType.kBrushless);
-        CANSparkMax m_ArmExtend = new CANSparkMax(60, MotorType.kBrushless);
+        CANSparkMax m_ArmMaster = new CANSparkMax(Constants.ArmConstants.ArmMasterID, MotorType.kBrushless);
+        CANSparkMax m_ArmFollower = new CANSparkMax(Constants.ArmConstants.ArmFollowerID, MotorType.kBrushless);
+        CANSparkMax m_ArmExtend = new CANSparkMax(Constants.ArmConstants.ArmExtenderID, MotorType.kBrushless);
         
         private final DoubleSolenoid m_doubleSolenoid = 
-            new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 2);
+            new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ArmConstants.ArmPCMForward, Constants.ArmConstants.ArmPCMBackwards);
       
         private SparkMaxPIDController m_PIDControllerActuate;
         private SparkMaxPIDController m_PIDControllerExtend;
 
         private RelativeEncoder m_encoderActuate;
         private RelativeEncoder m_encoderExtend;
+
+        private DutyCycleEncoder angleEncoder;
 
         public double maxVel, maxAcc;
 
@@ -45,9 +52,13 @@ import frc.robot.Constants;
 
         public ArmSubsystem() {
 
+            angleEncoder = new DutyCycleEncoder(new DigitalInput(Constants.ArmConstants.ArmAbsoluteActuator));
+
             resetEncoders ();
 
-            m_encoderActuate = m_ArmMaster.getEncoder(Type.kQuadrature, 406);
+
+
+            m_encoderActuate = m_ArmMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
             m_encoderExtend = m_ArmExtend.getEncoder();
             
 
@@ -69,6 +80,8 @@ import frc.robot.Constants;
             m_PIDControllerActuate = m_ArmMaster.getPIDController();
             m_PIDControllerExtend = m_ArmExtend.getPIDController();
 
+            m_PIDControllerActuate.setFeedbackDevice(m_encoderActuate);
+
             m_PIDControllerActuate.setP(Constants.kArmGains.kP);
             m_PIDControllerActuate.setI(Constants.kArmGains.kI);
             m_PIDControllerActuate.setD(Constants.kArmGains.kD);
@@ -88,18 +101,29 @@ import frc.robot.Constants;
 
             m_ArmFollower.follow(m_ArmMaster);
             
+            m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
+
+        }
+
+        @Override
+        public void periodic() {
+        SmartDashboard.putNumber("Arm Absolute Position", angleEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("ArmPosition", processVariable);
+          // This method will be called once per scheduler run
         }
 
         public void ActuateUp(){
         
-            m_PIDControllerActuate.setReference(90, CANSparkMax.ControlType.kSmartMotion);
-           // processVariable = m_encoderActuate.getVelocity();
+            m_PIDControllerActuate.setReference(1, CANSparkMax.ControlType.kSmartMotion);
+            processVariable = m_encoderActuate.getPosition();
         }
 
         public void ActuateRest(){
         
             m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion);
-          //  processVariable = m_encoderActuate.getVelocity();
+            processVariable = m_encoderActuate.getPosition();
+
+
         }
 
         public void Extend(){
@@ -112,11 +136,22 @@ import frc.robot.Constants;
          //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 
+        public void PneumaticsToggle(){
+            m_doubleSolenoid.toggle();
+        }
+
 
          public void resetEncoders(){
              m_encoderActuate.setPosition(0);
              m_encoderExtend.setPosition(0);
         }
+
+        public void resetToAbsolute(){
+            double absolutePosition = angleEncoder.getAbsolutePosition();// - angleOffset.getDegrees();
+            m_encoderActuate.setPosition(absolutePosition);
+        }
+    
+        
 
         public double getEncoderActuate(){
 

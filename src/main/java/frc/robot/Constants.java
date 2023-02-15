@@ -14,6 +14,9 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants {
     public static final double stickDeadband = 0.07;
 
+
+
+    
     public static final class Swerve {
         public static final int pigeonID = 0;
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -89,10 +92,6 @@ public final class Constants {
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
         public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
 
-        public static final int kFrontLeftTurningMotorPort = 0;
-        public static final int kBackLeftTurningMotorPort = 1;
-        public static final int kFrontRightTurningMotorPort = 12;
-        public static final int kBackRightTurningMotorPort = 13;
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 { //TODO: This must be tuned to specific robot
@@ -143,9 +142,31 @@ public final class Constants {
         }
     }
 
+    public static final class ArmConstants{
+        public static final int ArmMasterID = 
+        public static final int ArmFollowerID = 
+        public static final int ArmExtenderID = 
+
+        public static final int ArmPCMForward = 
+        public static final int ArmPCMBackwards = 
+
+        public static final int ArmAbsoluteActuator = 
+
+        public static final int HandMotorID = 
+
+
+    }
+
+    public static final class HopConstants{   
+        public static final int HopPCMForward = 
+        public static final int HopPCMBackwards = 
+
+
+    }
+
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 1;
-        public static final double kMaxAccelerationMetersPerSecondSquared = .5;
+        public static final double kMaxSpeedMetersPerSecond = .1;
+        public static final double kMaxAccelerationMetersPerSecondSquared = .05;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
@@ -158,6 +179,8 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+
     public static final Gains kArmGains = new Gains(5e-5, 1e-6, 0.0, 0.000156, 0, 1.0);
 
     public static final Gains kArmExtendGains = new Gains(0.15, 0.0, 1.0, 0.0, 0, 1.0);
