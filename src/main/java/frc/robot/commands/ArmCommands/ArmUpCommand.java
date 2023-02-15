@@ -1,23 +1,25 @@
-package frc.robot.commands;
+package frc.robot.commands.ArmCommands;
 
-import frc.robot.subsystems.HandSubsystem;
+
+import frc.robot.subsystems.ArmSubsystem;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HandInCommand extends CommandBase {
-    private HandSubsystem s_Hand;
+public class ArmUpCommand extends CommandBase {
+    private ArmSubsystem s_Arm;
 
 
 
-    public HandInCommand(HandSubsystem s_Hand) {
-        this.s_Hand = s_Hand;
-        addRequirements(s_Hand);
+    public ArmUpCommand(ArmSubsystem s_Arm) {
+        this.s_Arm = s_Arm;
+        addRequirements(s_Arm);
 
 
     }
 
     @Override
     public void execute() {
-        s_Hand.RunHandsIn();
+        s_Arm.ActuateUp();
 
         /* Drive */
 

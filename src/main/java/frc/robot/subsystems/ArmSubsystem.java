@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -53,14 +54,10 @@ import frc.robot.Constants.ArmConstants;
         public ArmSubsystem() {
 
             angleEncoder = new DutyCycleEncoder(new DigitalInput(Constants.ArmConstants.ArmAbsoluteActuator));
-
-            resetEncoders ();
-
-
-
             m_encoderActuate = m_ArmMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
             m_encoderExtend = m_ArmExtend.getEncoder();
             
+            resetEncoders();
 
             m_ArmMaster.set(0);
             m_ArmExtend.set(0);
@@ -81,6 +78,9 @@ import frc.robot.Constants.ArmConstants;
             m_PIDControllerExtend = m_ArmExtend.getPIDController();
 
             m_PIDControllerActuate.setFeedbackDevice(m_encoderActuate);
+
+        //fix
+          //  m_encoderActuate.setPositionConversionFactor(maxAcc);
 
             m_PIDControllerActuate.setP(Constants.kArmGains.kP);
             m_PIDControllerActuate.setI(Constants.kArmGains.kI);
@@ -111,9 +111,10 @@ import frc.robot.Constants.ArmConstants;
         @Override
         public void periodic() {
         SmartDashboard.putNumber("Arm Absolute Position", angleEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("ArmPosition", processVariable);
+        SmartDashboard.putNumber("ArmPosition", m_encoderActuate.getPosition());
           // This method will be called once per scheduler run
         }
+
 
         public void ActuateUp(){
         
@@ -143,6 +144,13 @@ import frc.robot.Constants.ArmConstants;
             m_doubleSolenoid.toggle();
         }
 
+        public void FinalArmIn(){
+            m_doubleSolenoid.set(Value.kForward);
+        }
+
+        public void FinalArmOut(){
+            m_doubleSolenoid.set(Value.kReverse);
+        }
 
          public void resetEncoders(){
              m_encoderActuate.setPosition(0);

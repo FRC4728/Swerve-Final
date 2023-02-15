@@ -143,12 +143,13 @@ public final class Constants {
     }
 
     public static final class ArmConstants{
+        
         public static final int ArmMasterID = 
         public static final int ArmFollowerID = 
         public static final int ArmExtenderID = 
 
-        public static final int ArmPCMForward = 
-        public static final int ArmPCMBackwards = 
+        public static final int ArmPCMForward = 0;
+        public static final int ArmPCMBackwards = 1;
 
         public static final int ArmAbsoluteActuator = 0;
 
@@ -158,8 +159,8 @@ public final class Constants {
     }
 
     public static final class HopConstants{   
-        public static final int HopPCMForward = 
-        public static final int HopPCMBackwards = 
+        public static final int HopPCMForward = 2;
+        public static final int HopPCMBackwards = 3;
 
 
     }

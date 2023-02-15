@@ -34,6 +34,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autos.Auto1;
 import frc.robot.commands.*;
+import frc.robot.commands.ArmCommands.ArmExtendCommand;
+import frc.robot.commands.ArmCommands.ArmPnuematicsCommand;
+import frc.robot.commands.ArmCommands.ArmRetractCommand;
+import frc.robot.commands.ArmCommands.ArmUpCommand;
+import frc.robot.commands.HandCommands.HandInCommand;
+import frc.robot.commands.HandCommands.HandOutcommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -131,6 +137,7 @@ public class RobotContainer {
 
         c_HandIn.whileTrue(new HandInCommand(s_Hand));
         c_HandOut.whileTrue(new HandOutcommand(s_Hand));  
+
 
 
         c_Hop.onTrue(new HopCommand(s_Hopper));
