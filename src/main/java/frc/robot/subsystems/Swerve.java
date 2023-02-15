@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.SwerveModule;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -30,18 +29,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
 
-//    private PhotonVisionSubsystem vision1;
+    private PhotonVisionSubsystem vision1;
     public SwerveDriveOdometry swerveOdometry;
     public SwerveDrivePoseEstimator poseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-   // private static final edu.wpi.first.math.Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0, 0, 0);
+   private static final edu.wpi.first.math.Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0, 0, 0);
 
     private static final edu.wpi.first.math.Vector<N3> driveMeasurementStdDevs = VecBuilder.fill(0, 0, 0);
 
-    public Swerve(){//(PhotonVisionSubsystem vision1) {
-   //     this.vision1 = vision1; 
+    public Swerve(PhotonVisionSubsystem vision1) {
+        this.vision1 = vision1; 
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -137,22 +136,23 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-        poseEstimator.update(getYaw(), getModulePositions());  
+      //  poseEstimator.update(getYaw(), getModulePositions());  
 
         // Also apply vision measurements. We use 0.3 seconds in the past as an example
         // -- on
         // a real robot, this must be calculated based either on latency or timestamps.
 
-  /*       Optional<EstimatedRobotPose> result =
+       Optional<EstimatedRobotPose> result =
                vision1.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
 
 
         if (result.isPresent()) {
             EstimatedRobotPose camPose = result.get();
+            SmartDashboard.putString("Photonvision pose", camPose.estimatedPose.toPose2d().toString());
             poseEstimator.addVisionMeasurement(
                     camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
        
-    }*/
+    }
 }
     @Override
     public void periodic(){

@@ -12,6 +12,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTag;
@@ -29,7 +30,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
-   // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   // public static RobotPoseEstimator robotPoseEstimator;
 
   // Location of all april tags on field, check if id is correct
@@ -103,9 +104,11 @@ public class PhotonVisionSubsystem extends SubsystemBase {
       new Pose3d(tag07.pose.getX(), tag07.pose.getY(), tag07.pose.getZ(), tag07.pose.getRotation()),
       new Pose3d(tag08.pose.getX(), tag08.pose.getY(), tag08.pose.getZ(), tag08.pose.getRotation()) };
 
+      AprilTagFieldLayout fieldLayout;
+
   // cameraName is actual name of camera, not nickname
   PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-3000");
-  // where cam is on robot
+  // where cam is on robot fix
   Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, Units.inchesToMeters(3)),
       new Rotation3d(0, 0, 0));
 
@@ -124,104 +127,171 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     aprilTags.add(tag07);
     aprilTags.add(tag08);
 
-    AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(aprilTags, Units.inchesToMeters(651.25),
+     fieldLayout = new AprilTagFieldLayout(aprilTags, Units.inchesToMeters(651.25),
         Units.inchesToMeters(315.5));
 
     var camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
     camList.add(new Pair<PhotonCamera, Transform3d>(camera, robotToCam));
 
-     poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
+    poseEstimator = new PhotonPoseEstimator(fieldLayout,
         PoseStrategy.AVERAGE_BEST_TARGETS, camera, robotToCam);
 
   }
 
   @Override
   public void periodic() {
-
+    Optional<EstimatedRobotPose> VisionPoseEstimator = poseEstimator.update();
+    SmartDashboard.putString("PoseEsimator location on field", VisionPoseEstimator.toString());
     // This method will be called once per scheduler run
   }
-
+/* 
   // does everything right now, returns nothing useful
- public Translation2d CameraGet() {
-  //take picture
-   var result = camera.getLatestResult();
+  public Translation2d CameraGet() {
+    // take picture
+    var result = camera.getLatestResult();
 
-  
-     if (result.hasTargets()) {
-      //get best target may not be optimal, check for better options
+    if (result.hasTargets()) {
+      // get best target may not be optimal, check for better options
       PhotonTrackedTarget target = result.getBestTarget();
       int targetID = target.getFiducialId();
-     int  i = targetID;
+      int i = targetID;
       double yaw = target.getYaw();
-    double pitch = target.getPitch();
-    double area = target.getArea();
-    double skew = target.getSkew(); 
+      double pitch = target.getPitch();
+      double area = target.getArea();
+      double skew = target.getSkew();
 
+      SmartDashboard.putNumber("Photon Yaw", yaw);
+      SmartDashboard.putNumber("Photon Pitch", pitch);
+      SmartDashboard.putNumber("Photon Area", area);
+      SmartDashboard.putNumber("Photon Skew", skew);
+      SmartDashboard.putNumber("Photon ID", targetID);
 
-   SmartDashboard.putNumber("Photon Yaw", yaw);
-    SmartDashboard.putNumber("Photon Pitch", pitch);
-    SmartDashboard.putNumber("Photon Area", area);
-    SmartDashboard.putNumber("Photon Skew", skew);
-    SmartDashboard.putNumber("Photon ID", targetID);
+      // double apriltagX;
+      // double apriltagY;
 
-   
+      var currenTag = new AprilTag[targetID];
+      for (int index = 0; index < targetID; index++) {
+        var apriltagX = apriltaglocations[index].getX();
+        var apriltagY = apriltaglocations[index].getY();
+        var apriltagZ = apriltaglocations[index].getZ();
+        var apriltagRotate = apriltaglocations[index].getRotation();
 
-   
+        // currenTag[targetID] = new AprilTag(targetID, new Pose3d(apriltagX, apriltagY,
+        // apriltagZ, apriltagRotate));
 
-//double apriltagX;
-  //double apriltagY;
+        double distanceMeters = PhotonUtils.calculateDistanceToTargetMeters(
+            Units.inchesToMeters(42.5),
+            Units.inchesToMeters(18.22),
+            Units.degreesToRadians(-33),
+            Units.degreesToRadians(target.getPitch()));
 
-  var currenTag = new AprilTag[targetID];
-    for (int index = 0; index < targetID; index++) {
-     var apriltagX = apriltaglocations[index].getX();
-var apriltagY = apriltaglocations[index].getY();
-var apriltagZ = apriltaglocations[index].getZ();
-var apriltagRotate = apriltaglocations[index].getRotation();
+        // PhotonUtils.estimateFieldToRobot(null, null, null);
+        // finds translation to target for trajectory generation
+        Translation2d translation = PhotonUtils.estimateCameraToTargetTranslation(
+            distanceMeters, Rotation2d.fromDegrees(-target.getYaw()));
 
+        SmartDashboard.putString("Translation to target",
+            new Translation2d(Units.metersToInches(translation.getX()), Units.metersToInches(translation.getY()))
+                .toString());
+        SmartDashboard.putNumber("Distance To Target", distanceMeters);
 
-//currenTag[targetID] = new AprilTag(targetID, new Pose3d(apriltagX, apriltagY, apriltagZ, apriltagRotate));
+        // Transform2d cameratotarget = PhotonUtils.estimateCameraToTarget(translation,
+        // new Pose2d(apriltagX, apriltagY, new Rotation2d(0))
+        // , new Rotation2d(drive1.getTheta()));
+
+        // SmartDashboard.putString("cameratotarget", cameratotarget.toString());
+        if (apriltagX < 7.62) {
+          SmartDashboard.putString("New RobotPose",
+              new Translation2d(Units.metersToInches(apriltagX + translation.getX()),
+                  Units.metersToInches(apriltagY + translation.getY())).toString());
+          return new Translation2d(apriltagX + translation.getX(), apriltagY + translation.getY());
+        } else if (apriltagX > 7.62) {
+          SmartDashboard.putString("New RobotPose",
+              (new Translation2d(Units.metersToInches(apriltagX - translation.getX()),
+                  Units.metersToInches(apriltagY - translation.getY())).toString()));
+          return new Translation2d(apriltagX - translation.getX(), apriltagY - translation.getY());
+        }
+      }
+    }
+    return new Translation2d(0, 0);
+  }
+
+*/
+
+  // does everything right now, returns nothing useful
+  public EstimatedRobotPose CameraGet() {
+    // take picture
+    var result = camera.getLatestResult();
+
+    if (result.hasTargets()) {
+      // get best target may not be optimal, check for better options
+      PhotonTrackedTarget target = result.getBestTarget();
+      int targetID = target.getFiducialId();
+      int i = targetID;
+      double yaw = target.getYaw();
+      double pitch = target.getPitch();
+      double area = target.getArea();
+      double skew = target.getSkew();
+
+      SmartDashboard.putNumber("Photon Yaw", yaw);
+      SmartDashboard.putNumber("Photon Pitch", pitch);
+      SmartDashboard.putNumber("Photon Area", area);
+      SmartDashboard.putNumber("Photon Skew", skew);
+      SmartDashboard.putNumber("Photon ID", targetID);
+
+      // double apriltagX;
+      // double apriltagY;
+
+        // currenTag[targetID] = new AprilTag(targetID, new Pose3d(apriltagX, apriltagY,
+        // apriltagZ, apriltagRotate));
+      
+      EstimatedRobotPose VisionRobotPose = lowestAmbiguityStrategy(result);
+      SmartDashboard.putString("Robot Vision on button", VisionRobotPose.toString());
+      }
     
+    return new EstimatedRobotPose(new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)), 0);
+  }
 
-  double distanceMeters =
-PhotonUtils.calculateDistanceToTargetMeters(
-        Units.inchesToMeters(42.5),
-       Units.inchesToMeters(18.22),
-       Units.degreesToRadians(-33),
-        Units.degreesToRadians(target.getPitch()));
+  private EstimatedRobotPose lowestAmbiguityStrategy(PhotonPipelineResult result) {
+    PhotonTrackedTarget lowestAmbiguityTarget = null;
 
-     //   PhotonUtils.estimateFieldToRobot(null, null, null);
-        //finds translation to target for trajectory generation
- Translation2d translation = PhotonUtils.estimateCameraToTargetTranslation(
-distanceMeters, Rotation2d.fromDegrees(-target.getYaw()));
+    double lowestAmbiguityScore = 10;
+
+    for (PhotonTrackedTarget target : result.targets) {
+        double targetPoseAmbiguity = target.getPoseAmbiguity();
+        // Make sure the target is a Fiducial target.
+        if (targetPoseAmbiguity != -1 && targetPoseAmbiguity < lowestAmbiguityScore) {
+            lowestAmbiguityScore = targetPoseAmbiguity;
+            lowestAmbiguityTarget = target;
+        }
+    }
+
+    // Although there are confirmed to be targets, none of them may be fiducial
+    // targets.
+
+    int targetFiducialId = lowestAmbiguityTarget.getFiducialId();
+
+    Optional<Pose3d> targetPosition = fieldLayout.getTagPose(targetFiducialId);
+
    
-           SmartDashboard.putString ("Translation to target", new Translation2d(Units.metersToInches(translation.getX()), Units.metersToInches(translation.getY())).toString());
-           SmartDashboard.putNumber("Distance To Target", distanceMeters);
-          
-        //  Transform2d cameratotarget = PhotonUtils.estimateCameraToTarget(translation, new Pose2d(apriltagX, apriltagY, new Rotation2d(0))
-        //   , new Rotation2d(drive1.getTheta()));
 
-            
-//SmartDashboard.putString("cameratotarget", cameratotarget.toString());
-          if (apriltagX < 7.62){
-            SmartDashboard.putString ("New RobotPose",  new Translation2d(Units.metersToInches( apriltagX + translation.getX()),Units.metersToInches( apriltagY + translation.getY())).toString());
-          return new Translation2d(apriltagX + translation.getX(),apriltagY + translation.getY());
-          }
-        else if (apriltagX > 7.62){
-         SmartDashboard.putString ("New RobotPose",  (new Translation2d(Units.metersToInches( apriltagX - translation.getX()),Units.metersToInches( apriltagY - translation.getY())).toString()));
-          return new Translation2d(apriltagX - translation.getX(),apriltagY - translation.getY());
-        }}}
-        return new Translation2d(0, 0);
-      }
+    return 
+            new EstimatedRobotPose(
+                    targetPosition
+                            .get()
+                            .transformBy(lowestAmbiguityTarget.getBestCameraToTarget().inverse())
+                            .transformBy(robotToCam.inverse()),
+                    result.getTimestampSeconds());
+}
 
 
 
-        public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-          poseEstimator.setReferencePose(prevEstimatedRobotPose);
-      //   SmartDashboard.putString("vision pose", poseEstimator.update().get().estimatedPose.getTranslation().toString());
-          return poseEstimator.update();
-      }
-
-  
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    poseEstimator.setReferencePose(prevEstimatedRobotPose);
+    // SmartDashboard.putString("vision pose",
+    // poseEstimator.update().get().estimatedPose.getTranslation().toString());
+    return poseEstimator.update();
+  }
 
   @Override
   public void simulationPeriodic() {
