@@ -3,12 +3,12 @@ package frc.robot.commands;
 import frc.robot.subsystems.HandSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HandCommand extends CommandBase {
+public class HandInCommand extends CommandBase {
     private HandSubsystem s_Hand;
 
 
 
-    public HandCommand(HandSubsystem s_Hand) {
+    public HandInCommand(HandSubsystem s_Hand) {
         this.s_Hand = s_Hand;
         addRequirements(s_Hand);
 
@@ -17,7 +17,7 @@ public class HandCommand extends CommandBase {
 
     @Override
     public void execute() {
-        s_Hand.RunHands();
+        s_Hand.RunHandsIn();
 
         /* Drive */
 
