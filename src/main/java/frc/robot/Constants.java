@@ -150,7 +150,7 @@ public final class Constants {
         public static final int ArmPCMForward = 
         public static final int ArmPCMBackwards = 
 
-        public static final int ArmAbsoluteActuator = 
+        public static final int ArmAbsoluteActuator = 0;
 
         public static final int HandMotorID = 
 

@@ -67,7 +67,10 @@ public class RobotContainer {
     private final JoystickButton c_ArmRetract = new JoystickButton(driver, 7);
     private final JoystickButton c_ArmPneumatic = new JoystickButton(driver, 9);
 
-    private final JoystickButton c_RunHands = new JoystickButton(driver, 10);
+    private final JoystickButton c_HandIn = new JoystickButton(driver, 10);
+    private final JoystickButton c_HandOut = new JoystickButton(driver, 11);
+
+
 
     private final JoystickButton c_Hop = new JoystickButton(driver, 4);
 
@@ -126,7 +129,9 @@ public class RobotContainer {
         c_ArmRetract.onTrue(new ArmRetractCommand(s_Arm));
         c_ArmPneumatic.onTrue(new ArmPnuematicsCommand(s_Arm));
 
-        c_RunHands.onTrue(new HandCommand(s_Hand));
+        c_HandIn.whileTrue(new HandInCommand(s_Hand));
+        c_HandOut.whileTrue(new HandOutcommand(s_Hand));  
+
 
         c_Hop.onTrue(new HopCommand(s_Hopper));
 

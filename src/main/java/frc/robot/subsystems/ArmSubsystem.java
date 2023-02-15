@@ -21,7 +21,7 @@ import frc.robot.Constants.ArmConstants;
      public class ArmSubsystem extends SubsystemBase {
         // The motors on the left side of the drive.
          
-        CANSparkMax m_ArmMaster = new CANSparkMax(Constants.ArmConstants.ArmMasterID, MotorType.kBrushless);
+        CANSparkMax m_ArmMaster = new CANSparkMax(Constants.ArmConstants.ArmMasterID, MotorType.kBrushed);
         CANSparkMax m_ArmFollower = new CANSparkMax(Constants.ArmConstants.ArmFollowerID, MotorType.kBrushless);
         CANSparkMax m_ArmExtend = new CANSparkMax(Constants.ArmConstants.ArmExtenderID, MotorType.kBrushless);
         
@@ -92,8 +92,11 @@ import frc.robot.Constants.ArmConstants;
             m_PIDControllerExtend.setD(Constants.kArmExtendGains.kD);
             m_PIDControllerExtend.setFF(Constants.kArmExtendGains.kF);
             
-            maxVel = 5676;
-            maxAcc = 5676;
+           // maxVel = 5676;
+         //   maxAcc = 5676;
+
+         maxVel = 1000;
+         maxAcc = 1000;
 
             int smartMotionSlot = 0;
             m_PIDControllerActuate.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);

@@ -53,14 +53,22 @@ import frc.robot.Constants;
         public void periodic() {
         }
 
-        public void RunHands(){
-        
-            m_HandController.setReference(100, CANSparkMax.ControlType.kVelocity);
+        public void RunHandsIn(){
+        //try
+           // m_HandController.setReference(1000, CANSparkMax.ControlType.kVelocity);
+        m_HandMotor.set(.5);
+
           //  processVariable = m_encoderActuate.getVelocity();
         }
 
 
-
+        public void RunHandsOut(){
+            //try
+               // m_HandController.setReference(1000, CANSparkMax.ControlType.kVelocity);
+            m_HandMotor.set(-.5);
+    
+              //  processVariable = m_encoderActuate.getVelocity();
+            }
 
 
     }

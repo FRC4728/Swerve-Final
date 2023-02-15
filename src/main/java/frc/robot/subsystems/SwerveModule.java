@@ -86,6 +86,10 @@ public class SwerveModule {
         if(Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 5000){
            Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
+           //try
+          //  mAngleMotor.set(ControlMode.MotionProfile, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+          //  lastAngle = angle;
+
             mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
             lastAngle = angle;
         }
