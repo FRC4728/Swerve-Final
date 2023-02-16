@@ -143,17 +143,21 @@ public final class Constants {
     }
 
     public static final class ArmConstants{
-        
-        public static final int ArmMasterID = 
-        public static final int ArmFollowerID = 
-        public static final int ArmExtenderID = 
 
-        public static final int ArmPCMForward = 0;
-        public static final int ArmPCMBackwards = 1;
+
+        //Fix These Values
+        public static final int ArmMasterID = 59;
+        public static final int ArmFollowerID = 60;
+        public static final int ArmExtenderID = 58;
+
+        public static final int ArmPCMForward = 1;
+        public static final int ArmPCMBackwards = 0;
 
         public static final int ArmAbsoluteActuator = 0;
 
-        public static final int HandMotorID = 
+        public static final int HandMotorID = 8;
+
+        public static final double AbsoluteArmOffset = .156;
 
 
     }

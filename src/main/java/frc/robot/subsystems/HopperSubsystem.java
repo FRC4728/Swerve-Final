@@ -25,6 +25,12 @@ public class HopperSubsystem extends SubsystemBase {
 
 public void AlternateHopper() {
     m_doubleSolenoid.toggle();
+   
+}
+
+
+public void Stop() {
+  m_doubleSolenoid.set(Value.kOff);
 }
 
   

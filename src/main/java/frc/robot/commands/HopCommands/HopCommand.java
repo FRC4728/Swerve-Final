@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.HopCommands;
 
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;

@@ -69,6 +69,7 @@ import frc.robot.Constants.ArmConstants;
 
             m_ArmMaster.setInverted(false);
             m_ArmExtend.setInverted(false);
+          //  m_ArmFollower.setInverted(true);
             
 
             m_ArmMaster.setIdleMode(IdleMode.kBrake);
@@ -95,14 +96,14 @@ import frc.robot.Constants.ArmConstants;
            // maxVel = 5676;
          //   maxAcc = 5676;
 
-         maxVel = 1000;
-         maxAcc = 1000;
+         maxVel = 400;
+         maxAcc = 400;
 
             int smartMotionSlot = 0;
             m_PIDControllerActuate.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
             m_PIDControllerActuate.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
 
-            m_ArmFollower.follow(m_ArmMaster);
+            m_ArmFollower.follow(m_ArmMaster, false);
             
             m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
 
@@ -118,13 +119,13 @@ import frc.robot.Constants.ArmConstants;
 
         public void ActuateUp(){
         
-            m_PIDControllerActuate.setReference(1, CANSparkMax.ControlType.kSmartMotion);
+            m_PIDControllerActuate.setReference(.1, CANSparkMax.ControlType.kSmartMotion);
             processVariable = m_encoderActuate.getPosition();
         }
 
         public void ActuateRest(){
         
-            m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+            m_PIDControllerActuate.setReference(.01, CANSparkMax.ControlType.kSmartMotion);
             processVariable = m_encoderActuate.getPosition();
 
 
@@ -145,11 +146,11 @@ import frc.robot.Constants.ArmConstants;
         }
 
         public void FinalArmIn(){
-            m_doubleSolenoid.set(Value.kForward);
+            m_doubleSolenoid.set(Value.kReverse);
         }
 
         public void FinalArmOut(){
-            m_doubleSolenoid.set(Value.kReverse);
+            m_doubleSolenoid.set(Value.kForward);
         }
 
          public void resetEncoders(){

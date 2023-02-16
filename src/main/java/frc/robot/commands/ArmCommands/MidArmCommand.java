@@ -23,7 +23,7 @@ public class MidArmCommand extends CommandBase {
     @Override
     public void execute() {
         // Add in command to be executed
-
+        
         new SequentialCommandGroup(
             new ArmUpCommand(s_Arm),
             new ArmExtendCommand(s_Arm)

@@ -36,10 +36,15 @@ import frc.robot.Autos.Auto1;
 import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmExtendCommand;
 import frc.robot.commands.ArmCommands.ArmPnuematicsCommand;
+import frc.robot.commands.ArmCommands.ArmRestCommand;
 import frc.robot.commands.ArmCommands.ArmRetractCommand;
 import frc.robot.commands.ArmCommands.ArmUpCommand;
+import frc.robot.commands.ArmCommands.FinalArmIn;
+import frc.robot.commands.ArmCommands.FinalArmOut;
 import frc.robot.commands.HandCommands.HandInCommand;
 import frc.robot.commands.HandCommands.HandOutcommand;
+import frc.robot.commands.HopCommands.HopperIn;
+import frc.robot.commands.HopCommands.HopperOut;
 import frc.robot.subsystems.*;
 
 /**
@@ -67,14 +72,14 @@ public class RobotContainer {
 
     private final JoystickButton c_Slowly = new JoystickButton(driver, 3);
 
-    private final JoystickButton c_ArmUp = new JoystickButton(driver, 6);
-    private final JoystickButton c_ArmRest = new JoystickButton(driver, 5);
-    private final JoystickButton c_ArmExtend = new JoystickButton(driver, 8);
-    private final JoystickButton c_ArmRetract = new JoystickButton(driver, 7);
-    private final JoystickButton c_ArmPneumatic = new JoystickButton(driver, 9);
+  //  private final JoystickButton c_ArmUp = new JoystickButton(driver, 6);
+  //  private final JoystickButton c_ArmRest = new JoystickButton(driver, 5);
+  //  private final JoystickButton c_ArmExtend = new JoystickButton(driver, 8);
+  //  private final JoystickButton c_ArmRetract = new JoystickButton(driver, 7);
+  //  private final JoystickButton c_ArmPneumatic = new JoystickButton(driver, 9);
 
-    private final JoystickButton c_HandIn = new JoystickButton(driver, 10);
-    private final JoystickButton c_HandOut = new JoystickButton(driver, 11);
+  //  private final JoystickButton c_HandIn = new JoystickButton(driver, 10);
+  //  private final JoystickButton c_HandOut = new JoystickButton(driver, 11);
 
 
 
@@ -125,22 +130,27 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        c_See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
+       // c_See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
         c_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-        c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
-        c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
-        c_ArmExtend.onTrue(new ArmExtendCommand(s_Arm));
-        c_ArmRetract.onTrue(new ArmRetractCommand(s_Arm));
-        c_ArmPneumatic.onTrue(new ArmPnuematicsCommand(s_Arm));
+       // c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
+       // c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
+      //  c_ArmExtend.onTrue(new ArmExtendCommand(s_Arm));
+      //  c_ArmRetract.onTrue(new ArmRetractCommand(s_Arm));
+      //  c_ArmPneumatic.onTrue(new ArmPnuematicsCommand(s_Arm));
 
-        c_HandIn.whileTrue(new HandInCommand(s_Hand));
-        c_HandOut.whileTrue(new HandOutcommand(s_Hand));  
+      //  c_HandIn.whileTrue(new HandInCommand(s_Hand));
+      //  c_HandOut.whileTrue(new HandOutcommand(s_Hand));  
 
+        c_See.onTrue(new ArmUpCommand(s_Arm));
+        c_Hop.onTrue(new ArmRestCommand(s_Arm));  
 
-
-        c_Hop.onTrue(new HopCommand(s_Hopper));
+        //c_See.onTrue(new FinalArmIn(s_Arm));
+      //  c_Hop.onTrue(new FinalArmOut(s_Arm));     
+        //        c_See.onTrue(new HopperIn(s_Hopper));  
+      //  c_Hop.onTrue(new HopperOut(s_Hopper));
+     //  
 
       //  Teleop1.onTrue(ramseteTeleopCommand(
     //            new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));

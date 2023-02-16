@@ -1,14 +1,14 @@
-package frc.robot.commands;
+package frc.robot.commands.HopCommands;
 
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HopCommand extends CommandBase {
+public class HopperOut extends CommandBase {
     private HopperSubsystem s_Hopper;
 
 
 
-    public HopCommand(HopperSubsystem s_Hopper) {
+    public HopperOut(HopperSubsystem s_Hopper) {
         this.s_Hopper = s_Hopper;
         addRequirements(s_Hopper);
 
@@ -17,7 +17,7 @@ public class HopCommand extends CommandBase {
 
     @Override
     public void execute() {
-        s_Hopper.AlternateHopper();
+        s_Hopper.HopOut();
 
         /* Drive */
 
