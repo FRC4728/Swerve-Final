@@ -1,17 +1,17 @@
 package frc.robot.commands.ArmCommands;
 
 import frc.robot.subsystems.ArmSubsystem;
-
+import frc.robot.subsystems.ExtendingSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmExtendCommand extends CommandBase {
-    private ArmSubsystem s_Arm;
+    private ExtendingSubsystem s_Extend;
 
 
 
-    public ArmExtendCommand(ArmSubsystem s_Arm) {
-        this.s_Arm = s_Arm;
-        addRequirements(s_Arm);
+    public ArmExtendCommand(ExtendingSubsystem s_Extend) {
+        this.s_Extend = s_Extend;
+        addRequirements(s_Extend);
 
     }
 
@@ -22,7 +22,7 @@ public class ArmExtendCommand extends CommandBase {
     @Override
     public void execute() {
         // Add in command to be executed
-s_Arm.Retract();
+        s_Extend.Extend();
     }
 
     public void end(boolean interrupted) {

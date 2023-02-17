@@ -3,12 +3,12 @@ package frc.robot.commands.HandCommands;
 import frc.robot.subsystems.HandSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HandOutcommand extends CommandBase {
+public class HandOutcommandCone extends CommandBase {
     private HandSubsystem s_Hand;
 
 
 
-    public HandOutcommand(HandSubsystem s_Hand) {
+    public HandOutcommandCone(HandSubsystem s_Hand) {
         this.s_Hand = s_Hand;
         addRequirements(s_Hand);
 
@@ -17,7 +17,7 @@ public class HandOutcommand extends CommandBase {
 
     @Override
     public void execute() {
-        s_Hand.RunHandsOut();
+        s_Hand.RunHandsOutCone();
 
         /* Drive */
 
@@ -25,6 +25,7 @@ public class HandOutcommand extends CommandBase {
 
     public void end(boolean interrupted) {
         // when command ends, stop motors here
+        s_Hand.Stop();
 
     }
 

@@ -1,24 +1,23 @@
-package frc.robot.commands.HopCommands;
+package frc.robot.commands.HandCommands;
 
-import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.HandSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HopperIn extends CommandBase {
-    private HopperSubsystem s_Hopper;
+public class HandOutcommandCube extends CommandBase {
+    private HandSubsystem s_Hand;
 
 
 
-    public HopperIn(HopperSubsystem s_Hopper) {
-        this.s_Hopper = s_Hopper;
-        addRequirements(s_Hopper);
+    public HandOutcommandCube(HandSubsystem s_Hand) {
+        this.s_Hand = s_Hand;
+        addRequirements(s_Hand);
 
 
     }
 
     @Override
     public void execute() {
-        
-        s_Hopper.HopIn();
+        s_Hand.RunHandsOutCube();
 
         /* Drive */
 
@@ -26,6 +25,8 @@ public class HopperIn extends CommandBase {
 
     public void end(boolean interrupted) {
         // when command ends, stop motors here
+        s_Hand.Stop();
+
     }
 
     // Returns true when the command should end.

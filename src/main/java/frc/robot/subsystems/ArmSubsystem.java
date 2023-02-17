@@ -7,6 +7,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -24,16 +25,13 @@ import frc.robot.Constants.ArmConstants;
          
         CANSparkMax m_ArmMaster = new CANSparkMax(Constants.ArmConstants.ArmMasterID, MotorType.kBrushless);
         CANSparkMax m_ArmFollower = new CANSparkMax(Constants.ArmConstants.ArmFollowerID, MotorType.kBrushless);
-        CANSparkMax m_ArmExtend = new CANSparkMax(Constants.ArmConstants.ArmExtenderID, MotorType.kBrushless);
         
         private final DoubleSolenoid m_doubleSolenoid = 
             new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ArmConstants.ArmPCMForward, Constants.ArmConstants.ArmPCMBackwards);
       
         private SparkMaxPIDController m_PIDControllerActuate;
-        private SparkMaxPIDController m_PIDControllerExtend;
 
         private RelativeEncoder m_encoderActuate;
-        private RelativeEncoder m_encoderExtend;
 
         private DutyCycleEncoder angleEncoder;
 
@@ -49,66 +47,71 @@ import frc.robot.Constants.ArmConstants;
             angleEncoder = new DutyCycleEncoder(new DigitalInput(Constants.ArmConstants.ArmAbsoluteActuator));
            m_encoderActuate = m_ArmMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
         // m_encoderActuate = m_ArmMaster.getEncoder();
-            m_encoderExtend = m_ArmExtend.getEncoder();
             
             resetEncoders();
 
-       //     new Thread(() -> {
-           //     try {
-         //           Thread.sleep(3000);
-         //          resetToAbsolute();
-         //
-        //        } catch (Exception e) {
-       //         }
-      //      }).start();
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1500);
+                  resetToAbsolute();
+         
+               } catch (Exception e) {
+              }
+           }).start();
 
             m_ArmMaster.set(0);
-            m_ArmExtend.set(0);
             m_ArmFollower.set(0);
 
             m_ArmMaster.restoreFactoryDefaults();
-            m_ArmExtend.restoreFactoryDefaults();
             m_ArmFollower.restoreFactoryDefaults();
 
-            m_ArmMaster.setInverted(false);
-            m_ArmExtend.setInverted(false);
-            m_ArmFollower.setInverted(false);
+            m_ArmMaster.setInverted(true);
+            m_ArmFollower.setInverted(true);
             
             m_encoderActuate.setPositionConversionFactor(386.909091);
             
             m_ArmMaster.setIdleMode(IdleMode.kBrake);
             m_ArmFollower.setIdleMode(IdleMode.kBrake);
-            m_ArmExtend.setIdleMode(IdleMode.kBrake);
 
             m_PIDControllerActuate = m_ArmMaster.getPIDController();
-            m_PIDControllerExtend = m_ArmExtend.getPIDController();
 
             m_PIDControllerActuate.setFeedbackDevice(m_encoderActuate);
 
         //fix
           //  m_encoderActuate.setPositionConversionFactor(maxAcc);
 
-            m_PIDControllerActuate.setP(Constants.kArmGains.kP);
-            m_PIDControllerActuate.setI(Constants.kArmGains.kI);
-            m_PIDControllerActuate.setD(Constants.kArmGains.kD);
-            m_PIDControllerActuate.setFF(Constants.kArmGains.kF);
+            m_PIDControllerActuate.setP(Constants.kArmGains.kP,0);
+            m_PIDControllerActuate.setI(Constants.kArmGains.kI,0);
+            m_PIDControllerActuate.setD(Constants.kArmGains.kD,0);
+            m_PIDControllerActuate.setFF(Constants.kArmGains.kF,0);
+           
+            m_PIDControllerActuate.setP(Constants.kArmGains1.kP,1);
+            m_PIDControllerActuate.setI(Constants.kArmGains1.kI,1);
+            m_PIDControllerActuate.setD(Constants.kArmGains1.kD,1);
+            m_PIDControllerActuate.setFF(Constants.kArmGains1.kF,1);
 
-            m_PIDControllerExtend.setP(Constants.kArmExtendGains.kP);
-            m_PIDControllerExtend.setI(Constants.kArmExtendGains.kI);
-            m_PIDControllerExtend.setD(Constants.kArmExtendGains.kD);
-            m_PIDControllerExtend.setFF(Constants.kArmExtendGains.kF);
+
+
             
            // maxVel = 5676;
          //   maxAcc = 5676;
 
-         maxVel = 1300;
-         maxAcc = 700;
+         maxVel = 3500;
+         maxAcc = 3500;
 
             int smartMotionSlot = 0;
+            
+            m_ArmMaster.enableVoltageCompensation(12);
             m_PIDControllerActuate.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
             m_PIDControllerActuate.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+            m_PIDControllerActuate.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
 
-          // m_ArmFollower.follow(m_ArmMaster, false);
+            m_PIDControllerActuate.setSmartMotionMaxVelocity(maxVel, 1);
+            m_PIDControllerActuate.setSmartMotionMaxAccel(maxAcc, 1);
+            m_PIDControllerActuate.setSmartMotionAllowedClosedLoopError(.1, 1);
+
+
+           m_ArmFollower.follow(m_ArmMaster, false);
             
             m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
 
@@ -118,42 +121,36 @@ import frc.robot.Constants.ArmConstants;
         public void periodic() {
         SmartDashboard.putNumber("Arm Absolute Position", angleEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("ArmPosition", m_encoderActuate.getPosition());
+
+
           // This method will be called once per scheduler run
         }
 
 
         public void ActuateUp(){
         
-           m_PIDControllerActuate.setReference(19, CANSparkMax.ControlType.kSmartMotion);
+           m_PIDControllerActuate.setReference(110, CANSparkMax.ControlType.kSmartMotion, 0, .12, ArbFFUnits.kPercentOut);
            processVariable = m_encoderActuate.getPosition();
-                    m_PIDControllerActuate.setReference(.05, CANSparkMax.ControlType.kPosition);
-          processVariable = m_encoderActuate.getPosition();
+        //            m_PIDControllerActuate.setReference(.05, CANSparkMax.ControlType.kPosition);
+        //  processVariable = m_encoderActuate.getPosition();
         }
 
         public void Actuate(double Speed){
         
-        m_ArmFollower.set(Speed);
-        m_ArmMaster.set(Speed);
-
+        m_ArmFollower.set(Speed/4);
+        m_ArmMaster.set(Speed/4);
          }
+
 
         public void ActuateRest(){
         
-            m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+            m_PIDControllerActuate.setReference(-15, CANSparkMax.ControlType.kSmartMotion, 1, -.12, ArbFFUnits.kPercentOut);
             processVariable = m_encoderActuate.getPosition();
 
 
         }
 
-        public void Extend(){
-            m_PIDControllerExtend.setReference(1, ControlType.kPosition);
-           // m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
-        }
-
-        public void Retract(){
-            m_PIDControllerExtend.setReference(0, ControlType.kPosition);
-         //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
-        }
+        
 
         public void PneumaticsToggle(){
             m_doubleSolenoid.toggle();
@@ -169,11 +166,10 @@ import frc.robot.Constants.ArmConstants;
 
          public void resetEncoders(){
              m_encoderActuate.setPosition(0);
-             m_encoderExtend.setPosition(0);
         }
 
         public void resetToAbsolute(){
-            double absolutePosition = angleEncoder.getAbsolutePosition() - Constants.ArmConstants.AbsoluteArmOffset;
+            double absolutePosition = (angleEncoder.getAbsolutePosition() * 386.909091) - Constants.ArmConstants.AbsoluteArmOffset;
             m_encoderActuate.setPosition(absolutePosition);
         }
     
@@ -184,10 +180,6 @@ import frc.robot.Constants.ArmConstants;
             return m_encoderActuate.getPosition();
         }
 
-        public double getEncoderExtend(){
-
-            return m_encoderExtend.getPosition();
-        }
     }
 
  

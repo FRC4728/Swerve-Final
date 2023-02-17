@@ -149,19 +149,17 @@ public final class Constants {
         public static final int ArmMasterID = 59;
         public static final int ArmFollowerID = 60;
         public static final int ArmExtenderID = 58;
+        public static final int HandMotorID = 57;
 
         public static final int ArmPCMForward = 1;
         public static final int ArmPCMBackwards = 0;
 
-        public static final int hi = 1;
-
         public static final int ArmAbsoluteActuator = 0;
 
-        public static final int HandMotorID = 8;
-
-        public static final double AbsoluteArmOffset = .156;
 
 
+        public static final double AbsoluteArmOffset = 66.354;
+  
     }
 
     public static final class HopConstants{   
@@ -188,8 +186,9 @@ public final class Constants {
     }
 
 
-    public static final Gains kArmGains = new Gains(5e-5, 1e-6, 0.0, 0.000156, 0, 1.0);
+    public static final Gains kArmGains = new Gains(.000000005, 0, 0.005, 0.0002/*156 */, 0, 1.0);
+    public static final Gains kArmGains1 = new Gains(.000005, 0, 0.05, 0.0002/*156 */, 0, 1.0);
 
-    public static final Gains kArmExtendGains = new Gains(0.15, 0.0, 1.0, 0.0, 0, 1.0);
+    public static final Gains kArmExtendGains = new Gains(0.25, 0.0, 0, 0, 0, 1.0);
 
 }
