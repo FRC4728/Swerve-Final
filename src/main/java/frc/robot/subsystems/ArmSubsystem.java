@@ -76,8 +76,8 @@ import frc.robot.Constants.ArmConstants;
             
             m_encoderActuate.setPositionConversionFactor(386.909091);
             
-            m_ArmMaster.setIdleMode(IdleMode.kCoast);
-            m_ArmFollower.setIdleMode(IdleMode.kCoast);
+            m_ArmMaster.setIdleMode(IdleMode.kBrake);
+            m_ArmFollower.setIdleMode(IdleMode.kBrake);
             m_ArmExtend.setIdleMode(IdleMode.kBrake);
 
             m_PIDControllerActuate = m_ArmMaster.getPIDController();
@@ -117,7 +117,7 @@ import frc.robot.Constants.ArmConstants;
         @Override
         public void periodic() {
         SmartDashboard.putNumber("Arm Absolute Position", angleEncoder.getAbsolutePosition());
-       // SmartDashboard.putNumber("ArmPosition", m_encoderActuate.getPosition());
+        SmartDashboard.putNumber("ArmPosition", m_encoderActuate.getPosition());
           // This method will be called once per scheduler run
         }
 

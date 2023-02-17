@@ -148,8 +148,8 @@ public class RobotContainer {
       //  c_HandIn.whileTrue(new HandInCommand(s_Hand));
       //  c_HandOut.whileTrue(new HandOutcommand(s_Hand));  
 
-       // c_See.onTrue(new ArmUpCommand(s_Arm));
-      //  c_Hop.onTrue(new ArmRestCommand(s_Arm));  
+        c_See.onTrue(new ArmUpCommand(s_Arm));
+        c_Hop.onTrue(new ArmRestCommand(s_Arm));  
 
         //c_See.onTrue(new FinalArmIn(s_Arm));
       //  c_Hop.onTrue(new FinalArmOut(s_Arm));     
