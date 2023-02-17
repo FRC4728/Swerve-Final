@@ -22,7 +22,7 @@ import frc.robot.Constants.ArmConstants;
      public class ArmSubsystem extends SubsystemBase {
         // The motors on the left side of the drive.
          
-        CANSparkMax m_ArmMaster = new CANSparkMax(Constants.ArmConstants.ArmMasterID, MotorType.kBrushed);
+        CANSparkMax m_ArmMaster = new CANSparkMax(Constants.ArmConstants.ArmMasterID, MotorType.kBrushless);
         CANSparkMax m_ArmFollower = new CANSparkMax(Constants.ArmConstants.ArmFollowerID, MotorType.kBrushless);
         CANSparkMax m_ArmExtend = new CANSparkMax(Constants.ArmConstants.ArmExtenderID, MotorType.kBrushless);
         
@@ -39,25 +39,28 @@ import frc.robot.Constants.ArmConstants;
 
         public double maxVel, maxAcc;
 
-        double setPoint, setPoint2, processVariable;
-        //double check this works
-        public void setSetPoint(double setPoint) {
-            this.setPoint = 0;
-        }
+        double processVariable;
 
-        public void setSetPoint2(double setPoint2) {
-            this.setPoint = 90;
-        }
 
         
 
         public ArmSubsystem() {
 
             angleEncoder = new DutyCycleEncoder(new DigitalInput(Constants.ArmConstants.ArmAbsoluteActuator));
-            m_encoderActuate = m_ArmMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
+           m_encoderActuate = m_ArmMaster.getAlternateEncoder(AlternateEncoderType.kQuadrature, 4096);
+        // m_encoderActuate = m_ArmMaster.getEncoder();
             m_encoderExtend = m_ArmExtend.getEncoder();
             
             resetEncoders();
+
+       //     new Thread(() -> {
+           //     try {
+         //           Thread.sleep(3000);
+         //          resetToAbsolute();
+         //
+        //        } catch (Exception e) {
+       //         }
+      //      }).start();
 
             m_ArmMaster.set(0);
             m_ArmExtend.set(0);
@@ -69,10 +72,12 @@ import frc.robot.Constants.ArmConstants;
 
             m_ArmMaster.setInverted(false);
             m_ArmExtend.setInverted(false);
-          //  m_ArmFollower.setInverted(true);
+            m_ArmFollower.setInverted(false);
             
-
-            m_ArmMaster.setIdleMode(IdleMode.kBrake);
+            m_encoderActuate.setPositionConversionFactor(386.909091);
+            
+            m_ArmMaster.setIdleMode(IdleMode.kCoast);
+            m_ArmFollower.setIdleMode(IdleMode.kCoast);
             m_ArmExtend.setIdleMode(IdleMode.kBrake);
 
             m_PIDControllerActuate = m_ArmMaster.getPIDController();
@@ -96,14 +101,14 @@ import frc.robot.Constants.ArmConstants;
            // maxVel = 5676;
          //   maxAcc = 5676;
 
-         maxVel = 400;
-         maxAcc = 400;
+         maxVel = 1300;
+         maxAcc = 700;
 
             int smartMotionSlot = 0;
             m_PIDControllerActuate.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
             m_PIDControllerActuate.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
 
-            m_ArmFollower.follow(m_ArmMaster, false);
+          // m_ArmFollower.follow(m_ArmMaster, false);
             
             m_doubleSolenoid.set(DoubleSolenoid.Value.kReverse);
 
@@ -112,20 +117,29 @@ import frc.robot.Constants.ArmConstants;
         @Override
         public void periodic() {
         SmartDashboard.putNumber("Arm Absolute Position", angleEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("ArmPosition", m_encoderActuate.getPosition());
+       // SmartDashboard.putNumber("ArmPosition", m_encoderActuate.getPosition());
           // This method will be called once per scheduler run
         }
 
 
         public void ActuateUp(){
         
-            m_PIDControllerActuate.setReference(.1, CANSparkMax.ControlType.kSmartMotion);
-            processVariable = m_encoderActuate.getPosition();
+           m_PIDControllerActuate.setReference(19, CANSparkMax.ControlType.kSmartMotion);
+           processVariable = m_encoderActuate.getPosition();
+                    m_PIDControllerActuate.setReference(.05, CANSparkMax.ControlType.kPosition);
+          processVariable = m_encoderActuate.getPosition();
         }
+
+        public void Actuate(double Speed){
+        
+        m_ArmFollower.set(Speed);
+        m_ArmMaster.set(Speed);
+
+         }
 
         public void ActuateRest(){
         
-            m_PIDControllerActuate.setReference(.01, CANSparkMax.ControlType.kSmartMotion);
+            m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion);
             processVariable = m_encoderActuate.getPosition();
 
 
@@ -133,7 +147,7 @@ import frc.robot.Constants.ArmConstants;
 
         public void Extend(){
             m_PIDControllerExtend.setReference(1, ControlType.kPosition);
-         //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
+           // m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 
         public void Retract(){
@@ -159,7 +173,7 @@ import frc.robot.Constants.ArmConstants;
         }
 
         public void resetToAbsolute(){
-            double absolutePosition = angleEncoder.getAbsolutePosition();// - angleOffset.getDegrees();
+            double absolutePosition = angleEncoder.getAbsolutePosition() - Constants.ArmConstants.AbsoluteArmOffset;
             m_encoderActuate.setPosition(absolutePosition);
         }
     

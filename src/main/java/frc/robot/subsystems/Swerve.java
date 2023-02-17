@@ -66,6 +66,7 @@ public class Swerve extends SubsystemBase {
         } catch (Exception e) {
         }
     }).start();
+    
          poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d(0, 0, new Rotation2d(0)));//, driveMeasurementStdDevs);// visionMeasurementStdDevs);
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions());
         

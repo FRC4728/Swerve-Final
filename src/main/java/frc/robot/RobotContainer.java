@@ -102,13 +102,18 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
-                new TeleopSwerve(
-                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
-                        () -> -driver.getRawAxis(rotationAxis),
-                        () -> c_Slowly.getAsBoolean()));
+     //   s_Swerve.setDefaultCommand(
+        //        new TeleopSwerve(
+         //               s_Swerve,
+          //              () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
+          //              () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
+           //             () -> -driver.getRawAxis(rotationAxis),
+            //            () -> c_Slowly.getAsBoolean()));
+//
+
+                        s_Arm.setDefaultCommand(new ArmOverride(
+                                s_Arm,
+                                () ->   -driver.getRawAxis(translationAxis)));
 
         m_chooser.setDefaultOption("Auto1", new Auto1(s_Swerve));
         // m_chooser.addOption("Complex Auto", m_complexAuto);
@@ -143,8 +148,8 @@ public class RobotContainer {
       //  c_HandIn.whileTrue(new HandInCommand(s_Hand));
       //  c_HandOut.whileTrue(new HandOutcommand(s_Hand));  
 
-        c_See.onTrue(new ArmUpCommand(s_Arm));
-        c_Hop.onTrue(new ArmRestCommand(s_Arm));  
+       // c_See.onTrue(new ArmUpCommand(s_Arm));
+      //  c_Hop.onTrue(new ArmRestCommand(s_Arm));  
 
         //c_See.onTrue(new FinalArmIn(s_Arm));
       //  c_Hop.onTrue(new FinalArmOut(s_Arm));     
