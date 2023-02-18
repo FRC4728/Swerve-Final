@@ -142,9 +142,10 @@ public class ArmSubsystem extends SubsystemBase {
         m_PIDControllerActuate.setReference(-18.8, CANSparkMax.ControlType.kSmartMotion, 1, -.12,
                 ArbFFUnits.kPercentOut);
         processVariable = m_encoderActuate.getPosition();
-
+        
     }
 
+    
     public void ActuateGround() {
 
         m_PIDControllerActuate.setReference(32, CANSparkMax.ControlType.kSmartMotion, 1, -.12, ArbFFUnits.kPercentOut);

@@ -29,11 +29,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-=======
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
->>>>>>> dd012218b1dfe49a761c4b1656b417c5aaa50057
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -45,10 +42,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmOverride;
 import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
 import frc.robot.commands.ArmCommands.ArmToHomeCommand;
-<<<<<<< HEAD
-=======
 import frc.robot.commands.ArmCommands.ArmToHopperCommand;
->>>>>>> dd012218b1dfe49a761c4b1656b417c5aaa50057
 import frc.robot.commands.ArmCommands.ArmHighCommand;
 import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
@@ -201,6 +195,7 @@ public class RobotContainer {
 
 
         c_1.onTrue(HighArm());
+        c_2.onTrue(ToHome());
     }
 
 
@@ -212,15 +207,17 @@ public class RobotContainer {
 
      public Command HighArm() {
        return new SequentialCommandGroup(
-                  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
-                  new ArmMiddleCommand(s_Arm).until(() ->( s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5)),
-                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
+      //            new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
+                  new ArmMiddleCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5))
+      //            new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
        );
-
+     }
        public Command ToHome() {
         return new SequentialCommandGroup(
         new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <= .3)),
-        )
+        new ArmToHomeCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 0.3) &  (s_Arm.getEncoderActuate() > -0.3))
+
+        );
 
        }
                 //  new ParallelRaceGroup(
@@ -230,23 +227,8 @@ public class RobotContainer {
                 //  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
                  // new ArmToHomeCommand(s_Arm)
        
-     }
-    public Command ToIntake() {
-     return new SequentialCommandGroup(
-                new ParallelCommandGroup(  
-                    new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
-                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.)),
-                    new ArmToHomeCommand(s_Arm)
-                ),
-                
-                new HopperOut(s_Hopper),
-                new ArmToHopperCommand(s_Arm),
-                new HandInConeCommand(s_Hand),
-                new RunThemHandSlowly(s_Hand),
-                new ArmToHomeCommand(s_Arm),
-                new HopperIn(s_Hopper));
-    }
-
+     
+  
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return m_chooser.getSelected();
