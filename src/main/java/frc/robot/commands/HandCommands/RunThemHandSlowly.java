@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class RunThemHandSlowly extends CommandBase {
     private HandSubsystem s_Hand;
 
+
+    private Timer m_timer = new Timer();
+
     public RunThemHandSlowly(HandSubsystem s_Hand) {
         this.s_Hand = s_Hand;
         addRequirements(s_Hand);
@@ -23,8 +26,9 @@ public class RunThemHandSlowly extends CommandBase {
 
     @Override
     public void execute() {
-        
+            if (m_timer.get() < .3){
             s_Hand.RunHandsInCone();
+        }
       
       }    
         
