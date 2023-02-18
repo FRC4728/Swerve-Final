@@ -1,19 +1,24 @@
 package frc.robot.commands.FullCommands;
 
+import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.FinalArmOut;
 import frc.robot.subsystems.ArmSubsystem;
-
+import frc.robot.subsystems.ExtendingSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class MidArmCommand extends CommandBase {
     private ArmSubsystem s_Arm;
+    private ExtendingSubsystem s_Extend;
 
 
 
     public MidArmCommand(ArmSubsystem s_Arm) {
         this.s_Arm = s_Arm;
         addRequirements(s_Arm);
+
+        this.s_Extend = s_Extend;
+        addRequirements(s_Extend);
 
     }
 
@@ -26,14 +31,10 @@ public class MidArmCommand extends CommandBase {
         // Add in command to be executed
         
         new SequentialCommandGroup(
-        //    new ArmUpCommand(s_Arm);
-         //   new ArmExtendCommand(s_Arm) 
+            new ArmMiddleCommand(s_Arm),
+            new 
             
-            
-            );
-        if (s_Arm.getEncoderActuate() > 15) {
-            new FinalArmOut(s_Arm);
-        }
+        )
 
     }
 

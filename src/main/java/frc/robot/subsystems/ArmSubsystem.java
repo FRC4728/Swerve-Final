@@ -152,16 +152,19 @@ public class ArmSubsystem extends SubsystemBase {
         processVariable = m_encoderActuate.getPosition();
 
     }
+    public void ActuateMiddle() {
+        m_PIDControllerActuate.setReference(90, CANSparkMax.ControlType.kSmartMotion, 0, .12, ArbFFUnits.kPercentOut);
 
+    }
     public void PneumaticsToggle() {
         m_doubleSolenoid.toggle();
     }
 
-    public void FinalArmIn() {
+    public void PistonArmIn() {
         m_doubleSolenoid.set(Value.kReverse);
     }
 
-    public void FinalArmOut() {
+    public void PistonArmOut() {
         m_doubleSolenoid.set(Value.kForward);
     }
 
