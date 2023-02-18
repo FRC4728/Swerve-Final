@@ -225,6 +225,13 @@ public class RobotContainer {
                  // new ArmToHomeCommand(s_Arm)
        
      }
+     public Command toHomeCommand() {
+        return new SequentialCommandGroup(
+                new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)),
+                new ArmRetractCommand(s_Extend).until (() -> s_Extend.getEncoderExtend() < .3),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > .3))
+        );
+     };
     public Command ToIntake() {
      return new SequentialCommandGroup(
                 new ParallelCommandGroup(  
