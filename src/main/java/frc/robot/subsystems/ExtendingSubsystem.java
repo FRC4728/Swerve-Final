@@ -103,6 +103,11 @@ import frc.robot.Constants;
          //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 
+        public void ExtendToGround(){
+            m_PIDControllerExtend.setReference(52, ControlType.kPosition);
+         //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
+        }
+
         
         public void stop(){
             m_ArmExtend.set(0);
