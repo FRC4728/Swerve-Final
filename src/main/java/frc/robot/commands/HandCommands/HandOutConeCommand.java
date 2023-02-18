@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class HandOutConeCommand extends CommandBase {
     private HandSubsystem s_Hand;
 
-    private Timer m_timer = new Timer();
 
     public HandOutConeCommand(HandSubsystem s_Hand) {
         this.s_Hand = s_Hand;
@@ -18,19 +17,12 @@ public class HandOutConeCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        m_timer.start();
-        m_timer.reset();
     }
 
 
     @Override
     public void execute() {
-      //if (m_timer.get() <= 1)
         s_Hand.RunHandsOutCone();
-
-
-        /* Drive */
-
     }
 
     public void end(boolean interrupted) {

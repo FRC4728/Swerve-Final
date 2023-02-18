@@ -161,12 +161,11 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        c2_1.onTrue(new ArmRetractCommand(s_Extend));
-        c2_2.onTrue(new ArmMiddleCommand(s_Arm).until(() ->( s_Arm.getEncoderActuate() < 90.5) &  s_Arm.getEncoderActuate() > 89.5));
-        c2_3.onTrue(new ArmExtendCommand(s_Extend));
-        c2_4.onTrue(new HandOutConeCommand(s_Hand));
-        c2_5.onTrue(new ArmRetractCommand(s_Extend));
-        c2_6.onTrue(new ArmToHomeCommand(s_Arm));
+        c_4.onTrue(ToIntake());
+
+        c_5.whileTrue(new RunThemHandSlowly(s_Hand));
+        c_6.whileTrue(new HandOutConeCommand(s_Hand));
+        
 
       //  c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
@@ -194,8 +193,8 @@ public class RobotContainer {
     //            new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 
 
-        c_1.onTrue(HighArm());
-        c_2.onTrue(ToHome());
+       // c_1.onTrue(ToIntake());
+        c_2.onTrue((MiddleArm()));
     }
 
 
@@ -205,21 +204,17 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
 
-     public Command HighArm() {
+     public Command MiddleArm() {
        return new SequentialCommandGroup(
-      //            new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
-                  new ArmMiddleCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5))
-      //            new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
+                  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
+                  new ArmMiddleCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5)),
+                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
        );
      }
-       public Command ToHome() {
-        return new SequentialCommandGroup(
-        new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <= .3)),
-        new ArmToHomeCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 0.3) &  (s_Arm.getEncoderActuate() > -0.3))
+  //   }
+   //     );
 
-        );
-
-       }
+    //   }
                 //  new ParallelRaceGroup(
                      // new HandOutConeCommand(s_Hand).withTimeout(1),
             //          new WaitCommand(1)
@@ -229,20 +224,20 @@ public class RobotContainer {
        
      
   
-     }
+     
     public Command ToIntake() {
      return new SequentialCommandGroup(
-                new ParallelCommandGroup(  
-                    new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
-                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3)),
-                    new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3))
-                ),
-                
+             //   new ParallelCommandGroup(  
+              //      new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
+              //      new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3))
+             //   ),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3)),
                 new HopperOut(s_Hopper).until (() -> (s_Hopper.HopperDown() == Value.kForward)),
+                new WaitCommand(1),
                 new ArmToHopperCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < -18.5) & (s_Arm.getEncoderActuate() > -19.1) ),
                 new HandInConeCommand(s_Hand).until(() -> s_Hand.getvoltage()),
-                new RunThemHandSlowly(s_Hand).withTimeout(1),
-                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3))),
+       new ArmToHomeCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 0.3) &  (s_Arm.getEncoderActuate() > -0.3)),
+   new RunThemHandSlowly(s_Hand).withTimeout(1),
                 new HopperIn(s_Hopper).until (() -> s_Hopper.HopperDown() == Value.kReverse));
     }
 

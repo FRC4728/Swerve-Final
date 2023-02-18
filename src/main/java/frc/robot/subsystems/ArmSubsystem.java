@@ -155,7 +155,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ActuateHome() {
 
-        m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion, 2, 0, ArbFFUnits.kPercentOut);
+        m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion, 1, 0, ArbFFUnits.kPercentOut);
         processVariable = m_encoderActuate.getPosition();
 
     }
