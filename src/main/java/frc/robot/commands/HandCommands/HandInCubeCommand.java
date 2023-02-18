@@ -13,7 +13,6 @@ public class HandInCubeCommand extends CommandBase {
         addRequirements(s_Hand);
     
 
-
     }
 
     @Override

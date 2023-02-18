@@ -27,7 +27,7 @@ public class ArmMiddleCommand extends CommandBase {
 
     public void end(boolean interrupted) {
         // when command ends, stop motors here
-
+        s_Arm.Stop();
     }
 
     // Returns true when the command should end.

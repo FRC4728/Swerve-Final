@@ -87,6 +87,12 @@ public class ArmSubsystem extends SubsystemBase {
         m_PIDControllerActuate.setD(Constants.kArmGains1.kD, 1);
         m_PIDControllerActuate.setFF(Constants.kArmGains1.kF, 1);
 
+        
+        m_PIDControllerActuate.setP(Constants.kArmGains1.kP, 2);
+        m_PIDControllerActuate.setI(Constants.kArmGains1.kI, 2);
+        m_PIDControllerActuate.setD(Constants.kArmGains1.kD, 2);
+        m_PIDControllerActuate.setFF(Constants.kArmGains1.kF, 2);
+
         // maxVel = 5676;
         // maxAcc = 5676;
 
@@ -148,7 +154,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ActuateHome() {
 
-        m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion, 1, -.12, ArbFFUnits.kPercentOut);
+        m_PIDControllerActuate.setReference(0, CANSparkMax.ControlType.kSmartMotion, 2, 0, ArbFFUnits.kPercentOut);
         processVariable = m_encoderActuate.getPosition();
 
     }
@@ -168,6 +174,9 @@ public class ArmSubsystem extends SubsystemBase {
         m_doubleSolenoid.set(Value.kForward);
     }
 
+    public void Stop(){
+        m_PIDControllerActuate.setReference(0, ControlType.kPosition);
+    }
     public void resetEncoders() {
         m_encoderActuate.setPosition(0);
     }

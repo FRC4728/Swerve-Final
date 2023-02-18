@@ -24,11 +24,14 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,7 +39,9 @@ import frc.robot.Autos.Auto1;
 import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmOverride;
 import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
+import frc.robot.commands.ArmCommands.ArmToHomeCommand;
 import frc.robot.commands.ArmCommands.ArmHighCommand;
+import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
 import frc.robot.commands.ExtendCommands.ExtendOverride;
@@ -151,33 +156,41 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
-        c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        c2_1.onTrue(new ArmRetractCommand(s_Extend));
+        c2_2.onTrue(new ArmMiddleCommand(s_Arm).until(() ->( s_Arm.getEncoderActuate() < 90.5) &  s_Arm.getEncoderActuate() > 89.5));
+        c2_3.onTrue(new ArmExtendCommand(s_Extend));
+        c2_4.onTrue(new HandOutConeCommand(s_Hand));
+        c2_5.onTrue(new ArmRetractCommand(s_Extend));
+        c2_6.onTrue(new ArmToHomeCommand(s_Arm));
+
+      //  c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
+
+      //  c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
        // c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
        // c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
-        c_9.onTrue(new ArmExtendCommand(s_Extend));
-        c_10.onTrue(new ArmRetractCommand(s_Extend));
+      //  c_9.onTrue(new ArmExtendCommand(s_Extend));
+      //  c_10.onTrue(new ArmRetractCommand(s_Extend));
       //  c_ArmPneumatic.onTrue(new ArmPnuematicsCommand(s_Arm));
 
-        c_5.onTrue(new HandInConeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
-        c_6.whileTrue(new HandOutConeCommand(s_Hand));  
+      //  c_5.onTrue(new HandInConeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
+     //   c_6.onTrue(new HandOutConeCommand(s_Hand));  
 
-        c_7.onTrue(new HandInCubeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
-        c_8.whileTrue(new HandOutCubeCommand(s_Hand));  
+       // c_7.onTrue(new HandInCubeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
+       // c_8.onTrue(new HandOutCubeCommand(s_Hand));  
 
 
-        c_3.onTrue(new ArmHighCommand(s_Arm));
-        c_4.onTrue(new ArmPistonRetractCommand(s_Arm));  
+       // c_3.onTrue(new ArmHighCommand(s_Arm));
+      //  c_4.onTrue(new ArmPistonRetractCommand(s_Arm));  
 
-        c_11.onTrue(new PistonArmIn(s_Arm));
+       // c_11.onTrue(new PistonArmIn(s_Arm));
 
       //  Teleop1.onTrue(ramseteTeleopCommand(
     //            new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 
 
-        c2_1.onTrue(new FullArmMiddleCommand(s_Arm, s_Extend, s_Hand));
+        c_1.onTrue(HighArm());
     }
 
 
@@ -186,6 +199,28 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+
+     public Command HighArm() {
+       return new SequentialCommandGroup(
+                  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
+                  new ArmMiddleCommand(s_Arm).until(() ->( s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5)),
+                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
+       );
+
+       public Command ToHome() {
+        return new SequentialCommandGroup(
+        new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <= .3)),
+        )
+
+       }
+                //  new ParallelRaceGroup(
+                     // new HandOutConeCommand(s_Hand).withTimeout(1),
+            //          new WaitCommand(1)
+            ////      ),
+                //  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
+                 // new ArmToHomeCommand(s_Arm)
+       
+     }
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return m_chooser.getSelected();

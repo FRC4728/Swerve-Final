@@ -25,8 +25,9 @@ public class HandOutConeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        while (m_timer.get() <= 1)
+      //if (m_timer.get() <= 1)
         s_Hand.RunHandsOutCone();
+
 
         /* Drive */
 
