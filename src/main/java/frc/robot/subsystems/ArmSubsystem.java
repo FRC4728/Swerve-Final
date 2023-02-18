@@ -168,6 +168,10 @@ public class ArmSubsystem extends SubsystemBase {
         m_doubleSolenoid.set(Value.kForward);
     }
 
+    public Value PistonArmExtended() {
+       return m_doubleSolenoid.get();
+    }
+
     public void resetEncoders() {
         m_encoderActuate.setPosition(0);
     }

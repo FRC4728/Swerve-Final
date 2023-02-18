@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class PistonArmIn extends CommandBase {
     private ArmSubsystem s_Arm;
+    public Boolean PistonExtend;
 
 
 
