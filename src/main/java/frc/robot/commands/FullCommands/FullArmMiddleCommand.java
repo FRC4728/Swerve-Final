@@ -3,11 +3,12 @@ package frc.robot.commands.FullCommands;
 import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
-import frc.robot.commands.ExtendCommands.FinalArmOut;
 import frc.robot.commands.HandCommands.HandOutConeCommand;
+import frc.robot.commands.HandCommands.HandOutCubeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExtendingSubsystem;
 import frc.robot.subsystems.HandSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -38,13 +39,26 @@ public class FullArmMiddleCommand extends CommandBase {
     public void execute() {
         // Add in command to be executed
         
-        new SequentialCommandGroup(
-            new ArmRetractCommand(s_Extend),
-            new ArmMiddleCommand(s_Arm),
-            new ArmExtendCommand(s_Extend),
-            new HandOutConeCommand(s_Hand)
+        if (SmartDashboard.getBoolean("IsCone?", true)) {
+            new SequentialCommandGroup(
+                new ArmRetractCommand(s_Extend),
+                new ArmMiddleCommand(s_Arm),
+                new ArmExtendCommand(s_Extend),
+                new HandOutConeCommand(s_Hand)
+            );
+        }
+
+            else if (SmartDashboard.getBoolean("IsCone?", false )){
+                new SequentialCommandGroup(
+                    new ArmRetractCommand(s_Extend),
+                    new ArmMiddleCommand(s_Arm),
+                    new ArmExtendCommand(s_Extend),
+                    new HandOutCubeCommand(s_Hand)
+                );
+            }
+
             
-        );
+        
 
     }
 
