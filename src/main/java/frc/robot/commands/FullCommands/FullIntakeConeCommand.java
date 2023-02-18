@@ -3,10 +3,12 @@ package frc.robot.commands.FullCommands;
 import frc.robot.commands.ArmCommands.ArmToHopperCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
 import frc.robot.commands.HandCommands.HandInCommandCone;
+import frc.robot.commands.HandCommands.HandInConeCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExtendingSubsystem;
 import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,7 +19,7 @@ public class FullIntakeConeCommand extends CommandBase {
     private HandSubsystem s_Hand;
     private HopperSubsystem s_Hop;
 
-
+    private Timer m_timer = new Timer();
 
 
     public FullIntakeConeCommand(ArmSubsystem s_Arm, ExtendingSubsystem s_Extend, HandSubsystem s_Hand, HopperSubsystem s_Hop) {
@@ -36,6 +38,8 @@ public class FullIntakeConeCommand extends CommandBase {
     }
 
     public void initialize() {
+        m_timer.start();
+        m_timer.reset();
         // Motor setup, start timers, ect.
     }
 
@@ -48,7 +52,9 @@ public class FullIntakeConeCommand extends CommandBase {
                 new ArmToHopperCommand(s_Arm)
             ),
             new ArmToHopperCommand(s_Arm),
-            new Hand
+            new HandInConeCommand(s_Hand)
+            new 
+
         
         )
 
