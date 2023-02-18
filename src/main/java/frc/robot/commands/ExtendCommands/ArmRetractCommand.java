@@ -1,17 +1,18 @@
-package frc.robot.commands.ArmCommands;
+package frc.robot.commands.ExtendCommands;
+
 
 import frc.robot.subsystems.ArmSubsystem;
-
+import frc.robot.subsystems.ExtendingSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class FinalArmIn extends CommandBase {
-    private ArmSubsystem s_Arm;
+public class ArmRetractCommand extends CommandBase {
+    private ExtendingSubsystem s_Extend;
 
 
 
-    public FinalArmIn(ArmSubsystem s_Arm) {
-        this.s_Arm = s_Arm;
-        addRequirements(s_Arm);
+    public ArmRetractCommand(ExtendingSubsystem s_Extend) {
+        this.s_Extend = s_Extend;
+        addRequirements(s_Extend);
 
     }
 
@@ -22,7 +23,7 @@ public class FinalArmIn extends CommandBase {
     @Override
     public void execute() {
         // Add in command to be executed
-    s_Arm.FinalArmIn();
+        s_Extend.Retract();
     }
 
     public void end(boolean interrupted) {

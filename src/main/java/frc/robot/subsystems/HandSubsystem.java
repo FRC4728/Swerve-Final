@@ -75,29 +75,34 @@ import frc.robot.Constants;
 
         public void RunHandsInCone(){
         //try
-            m_HandController.setReference(170, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
+            m_HandController.setReference(-180, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
 
           //  processVariable = m_encoderActuate.getVelocity();
         }
 
         public void RunHandsOutCone(){
             //try
-                m_HandController.setReference(-170, CANSparkMax.ControlType.kVelocity);
+                m_HandController.setReference(180, CANSparkMax.ControlType.kVelocity);
               //  processVariable = m_encoderActuate.getVelocity();
             }
 
             
         public void RunHandsInCube(){
          //try
-             m_HandController.setReference(-170, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
+             m_HandController.setReference(180, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
  
            //  processVariable = m_encoderActuate.getVelocity();
          }
  
          public void RunHandsOutCube(){
              //try
-                 m_HandController.setReference(170, CANSparkMax.ControlType.kVelocity);
+                 m_HandController.setReference(-180, CANSparkMax.ControlType.kVelocity);
                //  processVariable = m_encoderActuate.getVelocity();
+             }
+
+             public void HandOverride(){
+
+               m_HandController.setReference(100, ControlType.kVelocity);
              }
 
          public double GetPosition(){
@@ -111,7 +116,7 @@ import frc.robot.Constants;
 
       public boolean getvoltage(){
 
-         if (voltage > 30 & m_timer.get() >= 2){
+         if (voltage > 10.5 & m_timer.get() >= 2){
             SmartDashboard.putBoolean("true", true);
             return true;
          }

@@ -1,8 +1,7 @@
-package frc.robot.commands;
+package frc.robot.commands.ArmCommands;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ExtendingSubsystem;
 import frc.robot.subsystems.Swerve;
 
 import java.util.function.BooleanSupplier;
@@ -13,15 +12,15 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
-public class ExtendOverride extends CommandBase {    
-    private ExtendingSubsystem s_Extend;    
+public class ArmOverride extends CommandBase {    
+    private ArmSubsystem s_Arm;    
     private DoubleSupplier SpeedSupplier;
 
     
 
-    public ExtendOverride(ExtendingSubsystem s_Extend, DoubleSupplier SpeedSupplier) {
-        this.s_Extend = s_Extend;
-        addRequirements(s_Extend);
+    public ArmOverride(ArmSubsystem s_Arm, DoubleSupplier SpeedSupplier) {
+        this.s_Arm = s_Arm;
+        addRequirements(s_Arm);
 
         this.SpeedSupplier = SpeedSupplier;
 
@@ -33,14 +32,8 @@ public class ExtendOverride extends CommandBase {
         double Speed = MathUtil.applyDeadband(SpeedSupplier.getAsDouble(), Constants.stickDeadband);
 
         /* Drive */
-        s_Extend.ExtendOverride(Speed);
+        s_Arm.Actuate(Speed);
             
       
     }
-
-    public void end(boolean interrupted) {
-        // when command ends, stop motors here
-        s_Extend.stop();
-    }
-
 }

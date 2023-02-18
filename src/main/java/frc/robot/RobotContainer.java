@@ -34,17 +34,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autos.Auto1;
 import frc.robot.commands.*;
-import frc.robot.commands.ArmCommands.ArmExtendCommand;
-import frc.robot.commands.ArmCommands.ArmPnuematicsCommand;
-import frc.robot.commands.ArmCommands.ArmRestCommand;
-import frc.robot.commands.ArmCommands.ArmRetractCommand;
+import frc.robot.commands.ArmCommands.ArmOverride;
+import frc.robot.commands.ArmCommands.ArmToHopperCommand;
 import frc.robot.commands.ArmCommands.ArmUpCommand;
-import frc.robot.commands.ArmCommands.FinalArmIn;
-import frc.robot.commands.ArmCommands.FinalArmOut;
-import frc.robot.commands.HandCommands.HandInCommandCone;
-import frc.robot.commands.HandCommands.HandInCommandCube;
-import frc.robot.commands.HandCommands.HandOutcommandCone;
-import frc.robot.commands.HandCommands.HandOutcommandCube;
+import frc.robot.commands.ExtendCommands.ArmExtendCommand;
+import frc.robot.commands.ExtendCommands.ArmRetractCommand;
+import frc.robot.commands.ExtendCommands.ExtendOverride;
+import frc.robot.commands.ExtendCommands.FinalArmIn;
+import frc.robot.commands.ExtendCommands.FinalArmOut;
+import frc.robot.commands.HandCommands.HandInCubeCommand;
+import frc.robot.commands.HandCommands.HandInConeCommand;
+import frc.robot.commands.HandCommands.HandOutConeCommand;
+import frc.robot.commands.HandCommands.HandOutCubeCommand;
 import frc.robot.commands.HopCommands.HopperIn;
 import frc.robot.commands.HopCommands.HopperOut;
 import frc.robot.subsystems.*;
@@ -68,29 +69,18 @@ public class RobotContainer {
     private final int rotationAxis = 2;
 
     /* Driver Buttons */
-    private final JoystickButton c_zeroGyro = new JoystickButton(driver, 2);
-    //private final JoystickButton Teleop1 = new JoystickButton(driver, 10);
-    private final JoystickButton c_See = new JoystickButton(driver, 1);
-
-    private final JoystickButton c_Slowly = new JoystickButton(driver, 3);
-
-  //  private final JoystickButton c_ArmUp = new JoystickButton(driver, 6);
-  //  private final JoystickButton c_ArmRest = new JoystickButton(driver, 5);
-    private final JoystickButton c_ArmExtend = new JoystickButton(driver, 9);
-    private final JoystickButton c_ArmRetract = new JoystickButton(driver, 10);
-  //  private final JoystickButton c_ArmPneumatic = new JoystickButton(driver, 9);
-
-    private final JoystickButton c_HandInCone = new JoystickButton(driver, 5);
-    private final JoystickButton c_HandOutCone = new JoystickButton(driver, 6);
-
-    private final JoystickButton c_HandInCube = new JoystickButton(driver, 7);
-    private final JoystickButton c_HandOutCube = new JoystickButton(driver, 8);
-
-    private final JoystickButton c_PneumaticArmIn = new JoystickButton(driver, 11);
-    private final JoystickButton c_PneumaticArmOut = new JoystickButton(driver, 12);
-
-    private final JoystickButton c_Hop = new JoystickButton(driver, 4);
-
+    private final JoystickButton c_1 = new JoystickButton(driver, 1);
+    private final JoystickButton c_2 = new JoystickButton(driver, 2);
+    private final JoystickButton c_3 = new JoystickButton(driver, 3);
+    private final JoystickButton c_4 = new JoystickButton(driver, 4);
+    private final JoystickButton c_5 = new JoystickButton(driver, 5);
+    private final JoystickButton c_6 = new JoystickButton(driver, 6);
+    private final JoystickButton c_7 = new JoystickButton(driver, 7);
+    private final JoystickButton c_8 = new JoystickButton(driver, 8);
+    private final JoystickButton c_9 = new JoystickButton(driver, 9);
+    private final JoystickButton c_10 = new JoystickButton(driver, 10);
+    private final JoystickButton c_11 = new JoystickButton(driver, 11);
+    private final JoystickButton c_12 = new JoystickButton(driver, 12);
     /* Subsystems */
 
     private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem();
@@ -148,26 +138,26 @@ public class RobotContainer {
         /* Driver Buttons */
        // c_See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
-        c_zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
        // c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
        // c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
-        c_ArmExtend.onTrue(new ArmExtendCommand(s_Extend));
-        c_ArmRetract.onTrue(new ArmRetractCommand(s_Extend));
+        c_9.onTrue(new ArmExtendCommand(s_Extend));
+        c_10.onTrue(new ArmRetractCommand(s_Extend));
       //  c_ArmPneumatic.onTrue(new ArmPnuematicsCommand(s_Arm));
 
-        c_HandOutCone.onTrue(new HandInCommandCone(s_Hand).until( () -> s_Hand.getvoltage()));
-        c_HandInCone.whileTrue(new HandOutcommandCone(s_Hand));  
+        c_5.onTrue(new HandInConeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
+        c_6.whileTrue(new HandOutConeCommand(s_Hand));  
 
-        c_HandOutCube.onTrue(new HandInCommandCube(s_Hand).until( () -> s_Hand.getvoltage()));
-        c_HandInCube.whileTrue(new HandOutcommandCube(s_Hand));  
+        c_7.onTrue(new HandInCubeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
+        c_8.whileTrue(new HandOutCubeCommand(s_Hand));  
 
 
-        c_See.onTrue(new ArmUpCommand(s_Arm));
-        c_Hop.onTrue(new ArmRestCommand(s_Arm));  
+        c_3.onTrue(new ArmUpCommand(s_Arm));
+        c_4.onTrue(new ArmToHopperCommand(s_Arm));  
 
-        c_PneumaticArmIn.onTrue(new FinalArmIn(s_Arm));
-        c_PneumaticArmOut.onTrue(new FinalArmOut(s_Arm));     
+        c_11.onTrue(new FinalArmIn(s_Arm));
+        c_12.onTrue(new FinalArmOut(s_Arm));     
        //        c_zeroGyro.onTrue(new HopperIn(s_Hopper));  
       //  c_Slowly.onTrue(new HopperOut(s_Hopper));
      //  

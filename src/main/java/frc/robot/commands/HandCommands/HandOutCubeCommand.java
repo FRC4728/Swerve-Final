@@ -3,12 +3,12 @@ package frc.robot.commands.HandCommands;
 import frc.robot.subsystems.HandSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HandOutcommandCube extends CommandBase {
+public class HandOutCubeCommand extends CommandBase {
     private HandSubsystem s_Hand;
 
 
 
-    public HandOutcommandCube(HandSubsystem s_Hand) {
+    public HandOutCubeCommand(HandSubsystem s_Hand) {
         this.s_Hand = s_Hand;
         addRequirements(s_Hand);
 
