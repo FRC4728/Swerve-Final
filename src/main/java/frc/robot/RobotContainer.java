@@ -195,6 +195,7 @@ public class RobotContainer {
 
 
         c_1.onTrue(HighArm());
+        c_2.onTrue(ToHome());
     }
 
 
@@ -206,15 +207,17 @@ public class RobotContainer {
 
      public Command HighArm() {
        return new SequentialCommandGroup(
-                  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
-                  new ArmMiddleCommand(s_Arm).until(() ->( s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5)),
-                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
+      //            new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
+                  new ArmMiddleCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5))
+      //            new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
        );
-
+     }
        public Command ToHome() {
         return new SequentialCommandGroup(
         new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <= .3)),
-        )
+        new ArmToHomeCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 0.3) &  (s_Arm.getEncoderActuate() > -0.3))
+
+        );
 
        }
                 //  new ParallelRaceGroup(
@@ -224,6 +227,8 @@ public class RobotContainer {
                 //  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
                  // new ArmToHomeCommand(s_Arm)
        
+     
+  
      }
      public Command toHomeCommand() {
         return new SequentialCommandGroup(
