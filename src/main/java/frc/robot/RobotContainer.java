@@ -40,8 +40,8 @@ import frc.robot.commands.ArmCommands.ArmUpCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
 import frc.robot.commands.ExtendCommands.ExtendOverride;
-import frc.robot.commands.ExtendCommands.FinalArmIn;
-import frc.robot.commands.ExtendCommands.FinalArmOut;
+import frc.robot.commands.ExtendCommands.PistonArmIn;
+import frc.robot.commands.ExtendCommands.PistonArmOut;
 import frc.robot.commands.HandCommands.HandInCubeCommand;
 import frc.robot.commands.HandCommands.HandInConeCommand;
 import frc.robot.commands.HandCommands.HandOutConeCommand;
@@ -156,8 +156,8 @@ public class RobotContainer {
         c_3.onTrue(new ArmUpCommand(s_Arm));
         c_4.onTrue(new ArmToHopperCommand(s_Arm));  
 
-        c_11.onTrue(new FinalArmIn(s_Arm));
-        c_12.onTrue(new FinalArmOut(s_Arm));     
+        c_11.onTrue(new PistonArmIn(s_Arm));
+        c_12.onTrue(new PistonArmOut(s_Arm));     
        //        c_zeroGyro.onTrue(new HopperIn(s_Hopper));  
       //  c_Slowly.onTrue(new HopperOut(s_Hopper));
      //  
