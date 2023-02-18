@@ -15,6 +15,7 @@ import frc.robot.subsystems.ExtendingSubsystem;
 import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -73,6 +74,7 @@ public class FullArmGroundCommand extends CommandBase {
     }
 
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("getName()", false);
         // when command ends, stop motors here
     }
 

@@ -14,6 +14,7 @@ import frc.robot.subsystems.ExtendingSubsystem;
 import frc.robot.subsystems.HandSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -61,8 +62,10 @@ public class FullToIntakeCommand extends CommandBase {
                 new HopperOut(s_Hop),
                 new ArmToHopperCommand(s_Arm),
                 new HandInConeCommand(s_Hand),
+                new ParallelCommandGroup(
                 new RunThemHandSlowly(s_Hand),
-                new ArmToHomeCommand(s_Arm),
+                new ArmToHomeCommand(s_Arm)
+                ),
                 new HopperIn(s_Hop)
 
         );
@@ -72,6 +75,7 @@ public class FullToIntakeCommand extends CommandBase {
     }
 
     public void end(boolean interrupted) {
+        SmartDashboard.putBoolean("IsCone?", true);
         // when command ends, stop motors here
     }
 
