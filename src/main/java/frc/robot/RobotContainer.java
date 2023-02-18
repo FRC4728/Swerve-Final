@@ -42,6 +42,7 @@ import frc.robot.commands.ExtendCommands.ArmRetractCommand;
 import frc.robot.commands.ExtendCommands.ExtendOverride;
 import frc.robot.commands.ExtendCommands.PistonArmIn;
 import frc.robot.commands.ExtendCommands.PistonArmOut;
+import frc.robot.commands.FullCommands.FullArmMiddleCommand;
 import frc.robot.commands.HandCommands.HandInCubeCommand;
 import frc.robot.commands.HandCommands.HandInConeCommand;
 import frc.robot.commands.HandCommands.HandOutConeCommand;
@@ -62,6 +63,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick operator = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = 1;
@@ -81,6 +83,19 @@ public class RobotContainer {
     private final JoystickButton c_10 = new JoystickButton(driver, 10);
     private final JoystickButton c_11 = new JoystickButton(driver, 11);
     private final JoystickButton c_12 = new JoystickButton(driver, 12);
+
+    private final JoystickButton c2_1 = new JoystickButton(operator, 1);
+    private final JoystickButton c2_2 = new JoystickButton(operator, 2);
+    private final JoystickButton c2_3 = new JoystickButton(operator, 3);
+    private final JoystickButton c2_4 = new JoystickButton(operator, 4);
+    private final JoystickButton c2_5 = new JoystickButton(operator, 5);
+    private final JoystickButton c2_6 = new JoystickButton(operator, 6);
+    private final JoystickButton c2_7 = new JoystickButton(operator, 7);
+    private final JoystickButton c2_8 = new JoystickButton(operator, 8);
+    private final JoystickButton c2_9 = new JoystickButton(operator, 9);
+    private final JoystickButton c2_10 = new JoystickButton(operator, 10);
+    private final JoystickButton c2_11 = new JoystickButton(operator, 11);
+    private final JoystickButton c2_12 = new JoystickButton(operator, 12);
     /* Subsystems */
 
     private final PhotonVisionSubsystem s_Vision = new PhotonVisionSubsystem();
@@ -136,7 +151,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-       // c_See.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
+        c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
         c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
@@ -157,14 +172,12 @@ public class RobotContainer {
         c_4.onTrue(new ArmPistonRetractCommand(s_Arm));  
 
         c_11.onTrue(new PistonArmIn(s_Arm));
-        c_12.onTrue(new PistonArmOut(s_Arm));     
-       //        c_zeroGyro.onTrue(new HopperIn(s_Hopper));  
-      //  c_Slowly.onTrue(new HopperOut(s_Hopper));
-     //  
 
       //  Teleop1.onTrue(ramseteTeleopCommand(
     //            new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 
+
+        c2_1.onTrue(new FullArmMiddleCommand(s_Arm, s_Extend, s_Hand));
     }
 
 
