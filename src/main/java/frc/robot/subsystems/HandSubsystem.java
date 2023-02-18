@@ -94,6 +94,13 @@ import frc.robot.Constants;
            //  processVariable = m_encoderActuate.getVelocity();
          }
  
+         public void RunThemHandsSlowly(){
+          //try
+              m_HandController.setReference(30, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
+  
+            //  processVariable = m_encoderActuate.getVelocity();
+          }
+
          public void RunHandsOutCube(){
              //try
                  m_HandController.setReference(-180, CANSparkMax.ControlType.kVelocity);
