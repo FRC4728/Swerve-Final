@@ -1,11 +1,13 @@
 package frc.robot.commands.FullCommands;
 
 import frc.robot.commands.ArmCommands.ArmToHomeCommand;
+import frc.robot.commands.ArmCommands.ArmToHopperCommand;
 import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
 import frc.robot.commands.ExtendCommands.PistonArmIn;
 import frc.robot.commands.HandCommands.HandInConeCommand;
 import frc.robot.commands.HandCommands.RunThemHandSlowly;
+import frc.robot.commands.HopCommands.HopperIn;
 import frc.robot.commands.HopCommands.HopperOut;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExtendingSubsystem;
@@ -57,7 +59,11 @@ public class FullToIntakeCommand extends CommandBase {
                 ),
                 
                 new HopperOut(s_Hop),
-                new ArmToHomeCommand(s_Arm)
+                new ArmToHopperCommand(s_Arm),
+                new HandInConeCommand(s_Hand),
+                new RunThemHandSlowly(s_Hand),
+                new ArmToHomeCommand(s_Arm),
+                new HopperIn(s_Hop)
 
         );
 
