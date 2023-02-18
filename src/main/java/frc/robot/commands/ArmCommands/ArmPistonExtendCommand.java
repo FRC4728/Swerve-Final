@@ -1,16 +1,15 @@
 package frc.robot.commands.ArmCommands;
 
-
 import frc.robot.subsystems.ArmSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArmUpCommand extends CommandBase {
+public class ArmPistonExtendCommand extends CommandBase {
     private ArmSubsystem s_Arm;
 
 
 
-    public ArmUpCommand(ArmSubsystem s_Arm) {
+    public ArmPistonExtendCommand(ArmSubsystem s_Arm) {
         this.s_Arm = s_Arm;
         addRequirements(s_Arm);
 
@@ -19,7 +18,7 @@ public class ArmUpCommand extends CommandBase {
 
     @Override
     public void execute() {
-        s_Arm.ActuateUp();
+        s_Arm.PistonArmOut();
 
         /* Drive */
 

@@ -35,8 +35,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autos.Auto1;
 import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmOverride;
-import frc.robot.commands.ArmCommands.ArmToHopperCommand;
-import frc.robot.commands.ArmCommands.ArmUpCommand;
+import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
+import frc.robot.commands.ArmCommands.ArmHighCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
 import frc.robot.commands.ExtendCommands.ExtendOverride;
@@ -153,8 +153,8 @@ public class RobotContainer {
         c_8.whileTrue(new HandOutCubeCommand(s_Hand));  
 
 
-        c_3.onTrue(new ArmUpCommand(s_Arm));
-        c_4.onTrue(new ArmToHopperCommand(s_Arm));  
+        c_3.onTrue(new ArmHighCommand(s_Arm));
+        c_4.onTrue(new ArmPistonRetractCommand(s_Arm));  
 
         c_11.onTrue(new PistonArmIn(s_Arm));
         c_12.onTrue(new PistonArmOut(s_Arm));     
