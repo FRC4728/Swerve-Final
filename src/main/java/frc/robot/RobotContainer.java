@@ -229,6 +229,23 @@ public class RobotContainer {
        
      
   
+     }
+    public Command ToIntake() {
+     return new SequentialCommandGroup(
+                new ParallelCommandGroup(  
+                    new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
+                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3)),
+                    new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3))
+                ),
+                
+                new HopperOut(s_Hopper).until (() -> (s_Hopper.HopperDown() == Value.kForward)),
+                new ArmToHopperCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < -18.5) & (s_Arm.getEncoderActuate() > -19.1) ),
+                new HandInConeCommand(s_Hand).until(() -> s_Hand.getvoltage()),
+                new RunThemHandSlowly(s_Hand).withTimeout(1),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3))),
+                new HopperIn(s_Hopper).until (() -> s_Hopper.HopperDown() == Value.kReverse));
+    }
+
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return m_chooser.getSelected();

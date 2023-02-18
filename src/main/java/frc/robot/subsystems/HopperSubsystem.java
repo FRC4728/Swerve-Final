@@ -28,6 +28,10 @@ public void AlternateHopper() {
    
 }
 
+public Value HopperDown() {
+  return m_doubleSolenoid.get();
+}
+
 
 public void Stop() {
   m_doubleSolenoid.set(Value.kOff);
