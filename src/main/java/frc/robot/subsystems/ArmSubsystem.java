@@ -177,6 +177,10 @@ public class ArmSubsystem extends SubsystemBase {
     public void Stop(){
         m_PIDControllerActuate.setReference(0, ControlType.kPosition);
     }
+    public Value PistonArmExtended() {
+       return m_doubleSolenoid.get();
+    }
+
     public void resetEncoders() {
         m_encoderActuate.setPosition(0);
     }

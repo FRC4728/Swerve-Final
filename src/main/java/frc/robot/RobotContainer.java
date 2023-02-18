@@ -26,9 +26,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+=======
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+>>>>>>> dd012218b1dfe49a761c4b1656b417c5aaa50057
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -40,6 +45,10 @@ import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmOverride;
 import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
 import frc.robot.commands.ArmCommands.ArmToHomeCommand;
+<<<<<<< HEAD
+=======
+import frc.robot.commands.ArmCommands.ArmToHopperCommand;
+>>>>>>> dd012218b1dfe49a761c4b1656b417c5aaa50057
 import frc.robot.commands.ArmCommands.ArmHighCommand;
 import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
@@ -52,6 +61,7 @@ import frc.robot.commands.HandCommands.HandInCubeCommand;
 import frc.robot.commands.HandCommands.HandInConeCommand;
 import frc.robot.commands.HandCommands.HandOutConeCommand;
 import frc.robot.commands.HandCommands.HandOutCubeCommand;
+import frc.robot.commands.HandCommands.RunThemHandSlowly;
 import frc.robot.commands.HopCommands.HopperIn;
 import frc.robot.commands.HopCommands.HopperOut;
 import frc.robot.subsystems.*;
@@ -221,6 +231,22 @@ public class RobotContainer {
                  // new ArmToHomeCommand(s_Arm)
        
      }
+    public Command ToIntake() {
+     return new SequentialCommandGroup(
+                new ParallelCommandGroup(  
+                    new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
+                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.)),
+                    new ArmToHomeCommand(s_Arm)
+                ),
+                
+                new HopperOut(s_Hopper),
+                new ArmToHopperCommand(s_Arm),
+                new HandInConeCommand(s_Hand),
+                new RunThemHandSlowly(s_Hand),
+                new ArmToHomeCommand(s_Arm),
+                new HopperIn(s_Hopper));
+    }
+
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return m_chooser.getSelected();
