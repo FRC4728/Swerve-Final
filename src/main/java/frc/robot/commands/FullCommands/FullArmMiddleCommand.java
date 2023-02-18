@@ -56,7 +56,9 @@ public class FullArmMiddleCommand extends CommandBase {
                     new ArmRetractCommand(s_Extend),
                     new ArmMiddleCommand(s_Arm),
                     new ArmExtendCommand(s_Extend),
-                    new HandOutCubeCommand(s_Hand)
+                    new HandOutCubeCommand(s_Hand),
+                    new ArmRetractCommand(s_Extend),
+                    new ArmToHomeCommand(s_Arm)
                 );
             }
 
