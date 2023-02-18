@@ -68,7 +68,10 @@ import frc.robot.Constants;
             m_PIDControllerExtend.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
             m_PIDControllerExtend.setSmartMotionAllowedClosedLoopError(.3, 0);
 
+            m_ArmExtend.setSmartCurrentLimit(60);
+            //m_ArmExtend.setSmartCurrentLimit(smartMotionSlot, smartMotionSlot, smartMotionSlot);
 
+            m_ArmExtend.burnFlash();
             
         }
 
@@ -94,7 +97,7 @@ import frc.robot.Constants;
 
         public void Extend(){
          //   resetEncoders();
-            m_PIDControllerExtend.setReference(60, ControlType.kPosition, 0, 0, ArbFFUnits.kPercentOut);
+            m_PIDControllerExtend.setReference(57, ControlType.kPosition, 0, 0, ArbFFUnits.kPercentOut);
            // m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 
@@ -108,7 +111,7 @@ import frc.robot.Constants;
          //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 
-        
+    
         public void stop(){
             m_ArmExtend.set(0);
         }

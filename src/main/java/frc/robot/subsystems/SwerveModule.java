@@ -58,22 +58,22 @@ public class SwerveModule {
 
     private void setSpeed(SwerveModuleState desiredState, boolean quickTurn){
      SmartDashboard.putBoolean("quickTurn", quickTurn);
-     //  if (quickTurn == false) {
+       if (quickTurn == false) {
 
         
-     //      double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
-      //      mDriveMotor.set(ControlMode.Velocity, velocity / 4, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
-  //  }
-  //  else{
+           double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
+            mDriveMotor.set(ControlMode.Velocity, velocity / 4, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
+    }
+    else{
         
         double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
         mDriveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
     //}
     }
-
+    }
     private void setAngle(SwerveModuleState desiredState, boolean quickTurn){
       //  if (quickTurn == true & WheelTurnSpeed == 4000){
-     //       WheelTurnSpeed = 10000;
+     //       WheelTurnSpeed = 10000
     //        mAngleMotor.configMotionAcceleration(10000);
     //        mAngleMotor.configMotionCruiseVelocity(20000);
     //    }
@@ -97,7 +97,7 @@ public class SwerveModule {
             Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
             mAngleMotor.set(ControlMode.MotionMagic, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-            lastAngle = angle;
+           lastAngle = angle;
        }
 
     }
@@ -118,6 +118,7 @@ public class SwerveModule {
     public void resetToAbsolute(){
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(), Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
+        SmartDashboard.putBoolean("funny", true);
     }
 
     

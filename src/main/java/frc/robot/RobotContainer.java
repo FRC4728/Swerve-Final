@@ -44,6 +44,8 @@ import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
 import frc.robot.commands.ArmCommands.ArmToHomeCommand;
 import frc.robot.commands.ArmCommands.ArmToHopperCommand;
 import frc.robot.commands.ArmCommands.ArmHighCommand;
+import frc.robot.commands.ArmCommands.ArmHighHoldCommand;
+import frc.robot.commands.ArmCommands.ArmHomeHold;
 import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
 import frc.robot.commands.ExtendCommands.ArmRetractCommand;
@@ -123,22 +125,21 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-     //   s_Swerve.setDefaultCommand(
-        //        new TeleopSwerve(
-         //               s_Swerve,
-          //              () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
-          //              () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
-           //             () -> -driver.getRawAxis(rotationAxis),
-            //            () -> c_Slowly.getAsBoolean()));
-//
-
+    //  s_Swerve.setDefaultCommand(
+      ///          new TeleopSwerve(
+         //              s_Swerve,
+           //             () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
+             //           () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
+               //         () -> -driver.getRawAxis(rotationAxis),                                                                                                                                                                                                                                                                                                
+                 //       () -> c_8.getAsBoolean()));
+    
         s_Extend.setDefaultCommand(new ExtendOverride(
-                 s_Extend,
-                 () ->   -driver.getRawAxis(rotationAxis)));
+                s_Extend,
+               () ->   -driver.getRawAxis(3)));
 
-         s_Arm.setDefaultCommand(new ArmOverride(
-                  s_Arm,
-                  () ->   -driver.getRawAxis(translationAxis)));
+      //   s_Arm.setDefaultCommand(new ArmOverride(
+      //            s_Arm,
+       //          () ->   -driver.getRawAxis(2)));
 
         m_chooser.setDefaultOption("Auto1", new Auto1(s_Swerve));
         // m_chooser.addOption("Complex Auto", m_complexAuto);
@@ -148,7 +149,8 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
-    }
+    
+}
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
@@ -161,12 +163,13 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        c_4.onTrue(ToIntake());
+      //  c_4.onTrue(ToIntake());
 
-        c_5.whileTrue(new RunThemHandSlowly(s_Hand));
-        c_6.whileTrue(new HandOutConeCommand(s_Hand));
+     //   c_6.whileTrue(new RunThemHandSlowly(s_Hand));
+     //   c_5.whileTrue(new HandOutConeCommand(s_Hand));
+     c_1.onTrue(new InstantCommand(() -> s_Arm.PneumaticsToggle()));
         
-
+      //  c_3.onTrue(new InstantCommand(() -> s_Extend.resetEncoders()));
       //  c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
       //  c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
@@ -192,9 +195,11 @@ public class RobotContainer {
       //  Teleop1.onTrue(ramseteTeleopCommand(
     //            new Pose2d(Units.inchesToMeters(570), Units.inchesToMeters(42.19), new Rotation2d((0) * Math.PI))));
 
+  //  c_9.onTrue(MiddleArm());
+    //    c_10.onTrue(toHomeCommand());
 
-       // c_1.onTrue(ToIntake());
-        c_2.onTrue((MiddleArm()));
+    //    c_7.onTrue(new InstantCommand(() -> s_Hopper.AlternateHopper()));
+        
     }
 
 
@@ -206,10 +211,12 @@ public class RobotContainer {
 
      public Command MiddleArm() {
        return new SequentialCommandGroup(
-                  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.3)),
-                  new ArmMiddleCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 90.5) &  (s_Arm.getEncoderActuate() > 89.5)),
-                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 60.3) &  (s_Extend.getEncoderExtend() > 59.7))
-       );
+                  new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.7)),
+                  
+                  new ArmHighCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 109.8) &  (s_Arm.getEncoderActuate() > 100.2)),
+                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 57.3) &  (s_Extend.getEncoderExtend() > 56.7)),
+                  new ArmHighHoldCommand(s_Arm));
+       
      }
   //   }
    //     );
@@ -225,12 +232,14 @@ public class RobotContainer {
      
   
      
-     }
+     
      public Command toHomeCommand() {
         return new SequentialCommandGroup(
                 new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)),
-                new ArmRetractCommand(s_Extend).until (() -> s_Extend.getEncoderExtend() < .3),
-                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > .3))
+                new ArmRetractCommand(s_Extend).until (() -> s_Extend.getEncoderExtend() < .7),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < 2.5) & (s_Arm.getEncoderActuate() > -2.5)),
+                new ArmHomeHold(s_Arm)
+
         );
      };
     public Command ToIntake() {
@@ -239,14 +248,16 @@ public class RobotContainer {
               //      new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
               //      new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3))
              //   ),
-                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3)),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < 2.5) & (s_Arm.getEncoderActuate() > -2.5)),
                 new HopperOut(s_Hopper).until (() -> (s_Hopper.HopperDown() == Value.kForward)),
                 new WaitCommand(1),
                 new ArmToHopperCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < -18.5) & (s_Arm.getEncoderActuate() > -19.1) ),
                 new HandInConeCommand(s_Hand).until(() -> s_Hand.getvoltage()),
-       new ArmToHomeCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 0.3) &  (s_Arm.getEncoderActuate() > -0.3)),
-   new RunThemHandSlowly(s_Hand).withTimeout(1),
-                new HopperIn(s_Hopper).until (() -> s_Hopper.HopperDown() == Value.kReverse));
+       new ArmToHomeCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 2.5) &  (s_Arm.getEncoderActuate() > -2.5)),
+   new RunThemHandSlowly(s_Hand).withTimeout(.3),
+                new HopperIn(s_Hopper).until (() -> s_Hopper.HopperDown() == Value.kReverse),
+                new ArmHomeHold(s_Arm)
+                );
     }
 
     public Command getAutonomousCommand() {

@@ -25,7 +25,8 @@ import frc.robot.Constants;
          
         CANSparkMax m_HandMotor = new CANSparkMax(Constants.ArmConstants.HandMotorID, MotorType.kBrushless);
         
-      private PowerDistribution m_PDP = new PowerDistribution(0, ModuleType.kCTRE);
+    //  private PowerDistribution m_PDP = new PowerDistribution(0, ModuleType.kCTRE);
+    
         private SparkMaxPIDController m_HandController;
       private double voltage;
         private RelativeEncoder m_HandEncoder;
@@ -37,7 +38,7 @@ import frc.robot.Constants;
    
             m_HandMotor.set(0);
 
-         SmartDashboard.putBoolean("True", false);
+       //  SmartDashboard.putBoolean("True", false);
 
             m_HandMotor.restoreFactoryDefaults();
 
@@ -60,16 +61,16 @@ import frc.robot.Constants;
             m_HandMotor.setClosedLoopRampRate(.5);
             m_HandMotor.enableVoltageCompensation(12);
 
+          
 
 
-
-            
+            m_HandMotor.burnFlash();
         }
 
         @Override
         public void periodic() {
-         SmartDashboard.putNumber("Hand Voltage",    m_PDP.getCurrent(8));
-        voltage = m_PDP.getCurrent(8);
+      //   SmartDashboard.putNumber("Hand Voltage",    m_PDP.getCurrent(8));
+      ////  voltage = m_PDP.getCurrent(8);
          SmartDashboard.putNumber("Hand Velocity", m_HandEncoder.getVelocity());
         }
 
@@ -123,11 +124,13 @@ import frc.robot.Constants;
 
       public boolean getvoltage(){
 
-         if (voltage > 10.5 & m_timer.get() >= 2){
-            SmartDashboard.putBoolean("true", true);
+         if (voltage > 20
+          & m_timer.get() >= 1){
+           // SmartDashboard.putBoolean("true", true);
             return true;
          }
-        else {SmartDashboard.putBoolean("true", true);
+        else {
+          //SmartDashboard.putBoolean("true", true);
          return false;
       }
          

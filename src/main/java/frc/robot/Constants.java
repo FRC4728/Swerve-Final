@@ -12,7 +12,7 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.07;
+    public static final double stickDeadband = 0.15;
 
 
 
@@ -84,7 +84,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = .3; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = .25; //TODO: This must be tuned to specific robot
         /** Radians per Second */
         public static final double maxAngularVelocity = .25; //TODO: This must be tuned to specific robot
 
@@ -97,10 +97,10 @@ public final class Constants {
         public static final class Mod0 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 0;
-            public static final int canCoderID = 15;
+            public static final int canCoderID = 13;
             public static final int RelativeEncoder1 = 22;
             public static final int RelativeEncoder2 = 16;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees( 123.7);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees( 124.2);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -109,10 +109,10 @@ public final class Constants {
         public static final class Mod1 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 15;
             public static final int angleMotorID = 12;
-            public static final int canCoderID = 13;
+            public static final int canCoderID = 15;
             public static final int RelativeEncoder1 = 21;
             public static final int RelativeEncoder2 = 14;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(86.8);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(85.5);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -121,10 +121,10 @@ public final class Constants {
         public static final class Mod2 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID =2;
             public static final int angleMotorID = 1;
-            public static final int canCoderID = 20;
+            public static final int canCoderID = 17;
             public static final int RelativeEncoder1 = 24;
             public static final int RelativeEncoder2 = 25;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(118.2);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(116.8);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -133,10 +133,10 @@ public final class Constants {
         public static final class Mod3 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 14;
             public static final int angleMotorID = 13;
-            public static final int canCoderID = 17;
+            public static final int canCoderID = 20;
             public static final int RelativeEncoder1 = 23;
             public static final int RelativeEncoder2 = 18;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(111.8);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(112);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -186,8 +186,10 @@ public final class Constants {
     }
 
 
-    public static final Gains kArmGains = new Gains(.000000005, 0, 0.005, 0.0002/*156 */, 0, 1.0);
+    public static final Gains kArmGains = new Gains(.0000000005, 0, 0.005, 0.0002/*156 */, 0, 1.0);
     public static final Gains kArmGains1 = new Gains(.000005, 0, 0.05, 0.0002/*156 */, 0, 1.0);
+    public static final Gains kArmGains2 = new Gains(0, 0, 0.05, 0.0002/*156 */, 0, 1.0);
+
 
     public static final Gains kArmExtendGains = new Gains(0.25, 0.0, 0, 0, 0, 1.0);
 
