@@ -19,7 +19,7 @@ public class HopperIn extends CommandBase {
     public void execute() {
         
         s_Hopper.HopIn();
-        //Hello My fellow Shark. I have been greatly anticipating this time of day. It is my time, my day, you are my human and will forever be green.
+        //Hello My fellow Cow. I have been greatly anticipating this time of day. It is my time, my day, you are my human and will forever be green.
 
         /* Drive */
 
