@@ -29,11 +29,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-=======
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
->>>>>>> dd012218b1dfe49a761c4b1656b417c5aaa50057
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -45,10 +42,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmOverride;
 import frc.robot.commands.ArmCommands.ArmPistonRetractCommand;
 import frc.robot.commands.ArmCommands.ArmToHomeCommand;
-<<<<<<< HEAD
-=======
 import frc.robot.commands.ArmCommands.ArmToHopperCommand;
->>>>>>> dd012218b1dfe49a761c4b1656b417c5aaa50057
 import frc.robot.commands.ArmCommands.ArmHighCommand;
 import frc.robot.commands.ArmCommands.ArmMiddleCommand;
 import frc.robot.commands.ExtendCommands.ArmExtendCommand;
@@ -235,16 +229,16 @@ public class RobotContainer {
      return new SequentialCommandGroup(
                 new ParallelCommandGroup(  
                     new PistonArmIn(s_Arm).until(() -> (s_Arm.PistonArmExtended() == Value.kReverse)) ,
-                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.)),
-                    new ArmToHomeCommand(s_Arm)
+                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3)),
+                    new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3))
                 ),
                 
-                new HopperOut(s_Hopper),
-                new ArmToHopperCommand(s_Arm),
-                new HandInConeCommand(s_Hand),
-                new RunThemHandSlowly(s_Hand),
-                new ArmToHomeCommand(s_Arm),
-                new HopperIn(s_Hopper));
+                new HopperOut(s_Hopper).until (() -> (s_Hopper.HopperDown() == Value.kForward)),
+                new ArmToHopperCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < -18.5) & (s_Arm.getEncoderActuate() > -19.1) ),
+                new HandInConeCommand(s_Hand).until(() -> s_Hand.getvoltage()),
+                new RunThemHandSlowly(s_Hand).withTimeout(1),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < .3) & (s_Arm.getEncoderActuate() > -.3))),
+                new HopperIn(s_Hopper).until (() -> s_Hopper.HopperDown() == Value.kReverse));
     }
 
     public Command getAutonomousCommand() {
