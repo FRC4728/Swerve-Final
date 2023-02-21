@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -125,17 +126,18 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-    //  s_Swerve.setDefaultCommand(
-      ///          new TeleopSwerve(
-         //              s_Swerve,
-           //             () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
-             //           () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
-               //         () -> -driver.getRawAxis(rotationAxis),                                                                                                                                                                                                                                                                                                
-                 //       () -> c_8.getAsBoolean()));
+      s_Swerve.setDefaultCommand(
+          new TeleopSwerve(
+                       s_Swerve,
+                        () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
+                       () -> -driver.getRawAxis(rotationAxis),                                                                                                                                                                                                                                                                                                
+                       () -> c_8.getAsBoolean(),
+                       () -> c_7.getAsBoolean()));
     
-        s_Extend.setDefaultCommand(new ExtendOverride(
-                s_Extend,
-               () ->   -driver.getRawAxis(3)));
+     //   s_Extend.setDefaultCommand(new ExtendOverride(
+      //          s_Extend,
+      ///         () ->   -driver.getRawAxis(3)));
 
       //   s_Arm.setDefaultCommand(new ArmOverride(
       //            s_Arm,
@@ -167,12 +169,12 @@ public class RobotContainer {
 
      //   c_6.whileTrue(new RunThemHandSlowly(s_Hand));
      //   c_5.whileTrue(new HandOutConeCommand(s_Hand));
-     c_1.onTrue(new InstantCommand(() -> s_Arm.PneumaticsToggle()));
+     c_1.onTrue(new InstantCommand(() -> s_Hopper.AlternateHopper()));
         
       //  c_3.onTrue(new InstantCommand(() -> s_Extend.resetEncoders()));
       //  c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
-      //  c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
        // c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
        // c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
@@ -262,13 +264,15 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return m_chooser.getSelected();
+       return m_chooser.getSelected();
+ 
     }
 
+   
     // create a path to run on chooser
     public Command AutoTemplate() {
         // Path Planner Path
-        String robot_path = "TestPath";
+        String robot_path = "Auto1";
         PathPlannerTrajectory TestPath = PathPlanner.loadPath(robot_path, new PathConstraints(2, .5));
 
         HashMap<String, Command> eventMap = new HashMap<>();

@@ -10,11 +10,13 @@ import com.ctre.phoenix.sensors.SensorTimeBase;
 public final class CTREConfigs {
     public TalonFXConfiguration swerveAngleFXConfig;
     public TalonFXConfiguration swerveDriveFXConfig;
+    public TalonFXConfiguration swerveDriveAutoFXConfig;
     public CANCoderConfiguration swerveCanCoderConfig;
 
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();
         swerveDriveFXConfig = new TalonFXConfiguration();
+        swerveDriveAutoFXConfig = new TalonFXConfiguration();
         swerveCanCoderConfig = new CANCoderConfiguration();
 
         /* Swerve Angle Motor Configurations */
@@ -44,6 +46,20 @@ public final class CTREConfigs {
         swerveDriveFXConfig.supplyCurrLimit = driveSupplyLimit;
         swerveDriveFXConfig.openloopRamp = Constants.Swerve.openLoopRamp;
         swerveDriveFXConfig.closedloopRamp = Constants.Swerve.closedLoopRamp;
+
+        SupplyCurrentLimitConfiguration driveSupplyLimitAuto = new SupplyCurrentLimitConfiguration(
+            Constants.Swerve.driveEnableCurrentLimit, 
+            Constants.Swerve.driveContinuousCurrentLimit, 
+            Constants.Swerve.drivePeakCurrentLimit, 
+            Constants.Swerve.drivePeakCurrentDuration);
+
+        swerveDriveAutoFXConfig.slot0.kP = Constants.Swerve.driveKP;
+        swerveDriveAutoFXConfig.slot0.kI = Constants.Swerve.driveKI;
+        swerveDriveAutoFXConfig.slot0.kD = Constants.Swerve.driveKD;
+        swerveDriveAutoFXConfig.slot0.kF = Constants.Swerve.driveKF;        
+        swerveDriveAutoFXConfig.supplyCurrLimit = driveSupplyLimit;
+        swerveDriveAutoFXConfig.openloopRamp = 0;
+        swerveDriveAutoFXConfig.closedloopRamp = 0;
 
         
         /* Swerve CANCoder Configuration */

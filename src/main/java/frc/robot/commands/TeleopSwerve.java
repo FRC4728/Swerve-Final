@@ -17,9 +17,11 @@ public class TeleopSwerve extends CommandBase {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private BooleanSupplier quickTurnSupplier;
+    private BooleanSupplier zoomSupplier;
+
     
 
-    public TeleopSwerve(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier quickTurnSupplier) {
+    public TeleopSwerve(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier quickTurnSupplier, BooleanSupplier zoomSupplier) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -27,6 +29,8 @@ public class TeleopSwerve extends CommandBase {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.quickTurnSupplier = quickTurnSupplier;
+        this.zoomSupplier = zoomSupplier;
+
     }
 
     @Override
@@ -36,10 +40,11 @@ public class TeleopSwerve extends CommandBase {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
         boolean quickTurn = quickTurnSupplier.getAsBoolean();
+        boolean zoom = zoomSupplier.getAsBoolean();
         /* Drive */
         s_Swerve.drive(
             new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-            rotationVal * Constants.Swerve.maxAngularVelocity, quickTurn
+            rotationVal * Constants.Swerve.maxAngularVelocity, quickTurn, zoom
             
         );
     }

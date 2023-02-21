@@ -12,7 +12,7 @@ import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-    public static final double stickDeadband = 0.15;
+    public static final double stickDeadband = 0.04;
 
 
 
@@ -84,12 +84,12 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = .25; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = .2; //TODO: This must be tuned to specific robot
         /** Radians per Second */
         public static final double maxAngularVelocity = .25; //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
-        public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
+        public static final NeutralMode angleNeutralMode = NeutralMode.Brake;
         public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
 
         /* Module Specific Constants */
@@ -100,7 +100,7 @@ public final class Constants {
             public static final int canCoderID = 13;
             public static final int RelativeEncoder1 = 22;
             public static final int RelativeEncoder2 = 16;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees( 124.2);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees( 304.5);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -124,7 +124,7 @@ public final class Constants {
             public static final int canCoderID = 17;
             public static final int RelativeEncoder1 = 24;
             public static final int RelativeEncoder2 = 25;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(116.8);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(297.9);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }

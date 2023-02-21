@@ -69,7 +69,7 @@ public class Swerve extends SubsystemBase {
         
     }
 
-    public void drive(Translation2d translation, double rotation, boolean quickTurn) {
+    public void drive(Translation2d translation, double rotation, boolean quickTurn, boolean zoom) {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -81,7 +81,7 @@ public class Swerve extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], quickTurn);
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], quickTurn, zoom);
         }
     }    
 
@@ -90,7 +90,7 @@ public class Swerve extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
         
         for(SwerveModule mod : mSwerveMods){
-            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+            mod.setDesiredState(desiredStates[mod.moduleNumber], false, false);
         }
     }    
 
@@ -134,23 +134,23 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updateOdometry() {
-      //  poseEstimator.update(getYaw(), getModulePositions());  
+        poseEstimator.update(getYaw(), getModulePositions());  
 
         // Also apply vision measurements. We use 0.3 seconds in the past as an example
         // -- on
         // a real robot, this must be calculated based either on latency or timestamps.
 
-       Optional<EstimatedRobotPose> result =
-               vision1.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
+     //  Optional<EstimatedRobotPose> result =
+      //         vision1.getEstimatedGlobalPose(poseEstimator.getEstimatedPosition());
 
 
-        if (result.isPresent()) {
-            EstimatedRobotPose camPose = result.get();
-            SmartDashboard.putString("Photonvision pose", camPose.estimatedPose.toPose2d().toString());
-            poseEstimator.addVisionMeasurement(
-                    camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+     //   if (result.isPresent()) {
+       //     EstimatedRobotPose camPose = result.get();
+       //     SmartDashboard.putString("Photonvision pose", camPose.estimatedPose.toPose2d().toString());
+       //     poseEstimator.addVisionMeasurement(
+         //           camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
        
-    }
+//    }
 }
     @Override
     public void periodic(){
