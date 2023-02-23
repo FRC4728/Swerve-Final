@@ -126,22 +126,22 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-      s_Swerve.setDefaultCommand(
+     /*  s_Swerve.setDefaultCommand(
           new TeleopSwerve(
                        s_Swerve,
-                        () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
-                        () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
+                       () -> -driver.getRawAxis(translationAxis), // * -driver.getRawAxis(translationAxis),
+                      () -> -driver.getRawAxis(strafeAxis), // * -driver.getRawAxis(strafeAxis),
                        () -> -driver.getRawAxis(rotationAxis),                                                                                                                                                                                                                                                                                                
                        () -> c_8.getAsBoolean(),
-                       () -> c_7.getAsBoolean()));
+                      () -> c_7.getAsBoolean()));*/
     
-     //   s_Extend.setDefaultCommand(new ExtendOverride(
-      //          s_Extend,
-      ///         () ->   -driver.getRawAxis(3)));
+        s_Extend.setDefaultCommand(new ExtendOverride(
+                s_Extend,
+               () ->   -driver.getRawAxis(3)));
 
-      //   s_Arm.setDefaultCommand(new ArmOverride(
-      //            s_Arm,
-       //          () ->   -driver.getRawAxis(2)));
+        s_Arm.setDefaultCommand(new ArmOverride(
+            s_Arm,
+                 () ->   -driver.getRawAxis(1)));
 
         m_chooser.setDefaultOption("Auto1", new Auto1(s_Swerve));
         // m_chooser.addOption("Complex Auto", m_complexAuto);
@@ -165,28 +165,28 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-      //  c_4.onTrue(ToIntake());
+        c_4.onTrue(new ArmToHomeCommand(s_Arm));
 
      //   c_6.whileTrue(new RunThemHandSlowly(s_Hand));
-     //   c_5.whileTrue(new HandOutConeCommand(s_Hand));
-     c_1.onTrue(new InstantCommand(() -> s_Hopper.AlternateHopper()));
-        
-      //  c_3.onTrue(new InstantCommand(() -> s_Extend.resetEncoders()));
+       // c_7.whileTrue(new InstantCommand(() -> s_Arm.PneumaticsToggle()));
+     //c_1.onTrue(new InstantCommand(() -> s_Hopper.AlternateHopper()));
+     c_1.onTrue(MiddleArm());
+        c_3.onTrue(new ArmHighCommand(s_Arm));
       //  c_1.onTrue(new InstantCommand(() -> s_Vision.CameraGet()));
 
         c_2.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
-       // c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
+        //c_ArmUp.onTrue(new ArmUpCommand(s_Arm));
        // c_ArmRest.onTrue(new ArmUpCommand(s_Arm));
       //  c_9.onTrue(new ArmExtendCommand(s_Extend));
       //  c_10.onTrue(new ArmRetractCommand(s_Extend));
       //  c_ArmPneumatic.onTrue(new ArmPnuematicsCommand(s_Arm));
 
-      //  c_5.onTrue(new HandInConeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
-     //   c_6.onTrue(new HandOutConeCommand(s_Hand));  
+    //    c_5.onTrue(new HandInConeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
+       // c_6.whileTrue(new HandOutConeCommand(s_Hand));  
 
-       // c_7.onTrue(new HandInCubeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
-       // c_8.onTrue(new HandOutCubeCommand(s_Hand));  
+        c_5.onTrue(new HandInCubeCommand(s_Hand).until( () -> s_Hand.getvoltage()));
+        c_6.onTrue(new HandOutCubeCommand(s_Hand));  
 
 
        // c_3.onTrue(new ArmHighCommand(s_Arm));
@@ -214,10 +214,28 @@ public class RobotContainer {
      public Command MiddleArm() {
        return new SequentialCommandGroup(
                   new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.7)),
+                  new ArmHighCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() > 109.5) &  (s_Arm.getEncoderActuate() < 110.5)),
+                  new ParallelRaceGroup(
+                        new ArmHighHoldCommand(s_Arm),
+                        new ParallelCommandGroup(
+                                new ParallelRaceGroup(
+                                        new PistonArmOut(s_Arm),
+                                        new WaitCommand(2)
+                                ),
+                                new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 62) &  (s_Extend.getEncoderExtend() > 58)),
+                                new ParallelRaceGroup(        
+                                        new HandOutConeCommand(s_Hand),
+                                        new WaitCommand (1)
+                                ),
+                                new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.7)),
+                                new ParallelRaceGroup(
+                                        new PistonArmIn(s_Arm),
+                                        new WaitCommand(2)
+                                )
+                        )
+                  ),
+                  new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() > 2.5) & (s_Arm.getEncoderActuate() < 7.5)));
                   
-                  new ArmHighCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 109.8) &  (s_Arm.getEncoderActuate() > 100.2)),
-                  new ArmExtendCommand(s_Extend).until(() -> ( s_Extend.getEncoderExtend() < 57.3) &  (s_Extend.getEncoderExtend() > 56.7)),
-                  new ArmHighHoldCommand(s_Arm));
        
      }
   //   }
@@ -264,7 +282,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-       return m_chooser.getSelected();
+     //  return m_chooser.getSelected();
+     return AutoTest();
  
     }
 
@@ -396,4 +415,56 @@ public class RobotContainer {
                  s_Swerve.getYaw()))),
                 swerveControllerCommand);
     }
+
+    Command AutoTest() {
+        TrajectoryConfig config = new TrajectoryConfig(
+                Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics);
+
+       
+
+        var interiorQuinticWaypoints = new ArrayList<Pose2d>();
+        interiorQuinticWaypoints.add(new Pose2d(0, 0, new Rotation2d(0)));
+       // interiorQuinticWaypoints.add(new Pose2d(1, 1, new Rotation2d(0)));
+        // interiorQuinticWaypoints.add(new Pose2d(Units.feetToMeters(0),
+        // Units.feetToMeters(0), new Rotation2d(90)));
+        interiorQuinticWaypoints.add(new Pose2d(1, 0, new Rotation2d(0)));
+        // interiorQuinticWaypoints.add(new Pose2d(1, 0,new Rotation2d(0)));
+        // An example trajectory to follow. All units in meters.
+        
+      //   * Trajectory exampleTrajectory =
+      //   * TrajectoryGenerator.generateTrajectory(
+      //   * // Start at the origin facing the +X direction
+      //   * new Pose2d(0, 0, new Rotation2d(0)),
+      //   * // Pass through these two interior waypoints, making an 's' curve path
+       //  * List.of(new Translation2d(.5, .5), new Translation2d(1, 1)),
+      //   * // End 3 meters straight ahead of where we started, facing forward
+      //   * new Pose2d(2, 0, new Rotation2d(0)),
+        // * config);
+          Trajectory exampleTrajectory =
+          TrajectoryGenerator.generateTrajectory(
+           interiorQuinticWaypoints,
+           config);
+         
+        var thetaController = new ProfiledPIDController(
+                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+                exampleTrajectory,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics, // SwerveDriveKinematics,
+                new PIDController(1.6, 0, .000000000000000000000000000000000001),
+                new PIDController(1.6, 0, .000000000000000000000000000000000001),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
+
+        return new SequentialCommandGroup(
+
+                new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+                swerveControllerCommand);
+    }
+
 }
