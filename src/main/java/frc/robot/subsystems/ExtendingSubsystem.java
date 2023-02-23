@@ -97,7 +97,7 @@ import frc.robot.Constants;
 
         public void Extend(){
          //   resetEncoders();
-            m_PIDControllerExtend.setReference(57, ControlType.kPosition, 0, 0, ArbFFUnits.kPercentOut);
+            m_PIDControllerExtend.setReference(60, ControlType.kPosition, 0, 0, ArbFFUnits.kPercentOut);
            // m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 

@@ -25,7 +25,7 @@ import frc.robot.Constants;
          
         CANSparkMax m_HandMotor = new CANSparkMax(Constants.ArmConstants.HandMotorID, MotorType.kBrushless);
         
-    //  private PowerDistribution m_PDP = new PowerDistribution(0, ModuleType.kCTRE);
+      private PowerDistribution m_PDP = new PowerDistribution(0, ModuleType.kCTRE);
     
         private SparkMaxPIDController m_HandController;
       private double voltage;
@@ -69,8 +69,8 @@ import frc.robot.Constants;
 
         @Override
         public void periodic() {
-      //   SmartDashboard.putNumber("Hand Voltage",    m_PDP.getCurrent(8));
-      ////  voltage = m_PDP.getCurrent(8);
+        SmartDashboard.putNumber("Hand Voltage",    m_PDP.getCurrent(8));
+       voltage = m_PDP.getCurrent(8);
          SmartDashboard.putNumber("Hand Velocity", m_HandEncoder.getVelocity());
         }
 
@@ -124,7 +124,7 @@ import frc.robot.Constants;
 
       public boolean getvoltage(){
 
-         if (voltage > 20
+         if (voltage > 6
           & m_timer.get() >= 1){
            // SmartDashboard.putBoolean("true", true);
             return true;

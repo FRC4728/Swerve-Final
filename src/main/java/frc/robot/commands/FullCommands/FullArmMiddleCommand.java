@@ -46,14 +46,14 @@ public class FullArmMiddleCommand extends CommandBase {
     //    if (SmartDashboard.getBoolean("IsCone?", true) == true) {
             new SequentialCommandGroup(
               //  new ArmRetractCommand(s_Extend),
-                new ArmMiddleCommand(s_Arm),
-                new ArmExtendCommand(s_Extend),
-                new ParallelRaceGroup(
-                    new HandOutConeCommand(s_Hand),
-                    new WaitCommand(1)
-                ),
-                new ArmRetractCommand(s_Extend),
-                new ArmToHomeCommand(s_Arm)
+                new ArmMiddleCommand(s_Arm).until(() ->(s_Arm.getEncoderActuate() < 109.8) &  (s_Arm.getEncoderActuate() > 100.2)),
+                //new ArmExtendCommand(s_Extend),
+                //new ParallelRaceGroup(
+                    //new HandOutConeCommand(s_Hand),
+                    //new WaitCommand(1)
+                //),
+                //new ArmRetractCommand(s_Extend),
+                new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < 7.5) & (s_Arm.getEncoderActuate() > 2.5))
             );
      //   }
 

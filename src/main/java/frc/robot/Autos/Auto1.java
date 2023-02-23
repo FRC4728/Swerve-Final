@@ -32,7 +32,7 @@ public class Auto1 extends SequentialCommandGroup {
     public  Auto1(Swerve s_Swerve){
     // Path Planner Path
     String robot_path = "Auto1";
-    PathPlannerTrajectory TestPath = PathPlanner.loadPath(robot_path, new PathConstraints(.1, .1));
+    PathPlannerTrajectory TestPath = PathPlanner.loadPath(robot_path, new PathConstraints(1, .8));
     HashMap<String, Command> eventMap = new HashMap<>();
 
    // eventMap.put("Intake", new IntakeCommand(m_IntakeSubsystem));
@@ -47,8 +47,8 @@ public class Auto1 extends SequentialCommandGroup {
         s_Swerve::getPose,
         s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
         Constants.Swerve.swerveKinematics,       
-       new PIDConstants(.08, 0, 0),
-        new PIDConstants(1, 0, 0),
+       new PIDConstants(1.9, 0, 0, .005),
+        new PIDConstants(0, 0, 0, .005),
         s_Swerve::setModuleStates,
         eventMap,
         s_Swerve);

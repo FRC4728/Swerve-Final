@@ -100,7 +100,7 @@ public final class Constants {
             public static final int canCoderID = 13;
             public static final int RelativeEncoder1 = 22;
             public static final int RelativeEncoder2 = 16;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees( 304.5);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees( 305.6);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -112,7 +112,7 @@ public final class Constants {
             public static final int canCoderID = 15;
             public static final int RelativeEncoder1 = 21;
             public static final int RelativeEncoder2 = 14;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(85.5);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(265.9);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -121,10 +121,10 @@ public final class Constants {
         public static final class Mod2 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID =2;
             public static final int angleMotorID = 1;
-            public static final int canCoderID = 17;
+            public static final int canCoderID = 20;
             public static final int RelativeEncoder1 = 24;
             public static final int RelativeEncoder2 = 25;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(297.9);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(299.5);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -133,10 +133,10 @@ public final class Constants {
         public static final class Mod3 { //TODO: This must be tuned to specific robot
             public static final int driveMotorID = 14;
             public static final int angleMotorID = 13;
-            public static final int canCoderID = 20;
+            public static final int canCoderID = 17;
             public static final int RelativeEncoder1 = 23;
             public static final int RelativeEncoder2 = 18;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(112);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(291.3);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -170,8 +170,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = .1;
-        public static final double kMaxAccelerationMetersPerSecondSquared = .05;
+        public static final double kMaxSpeedMetersPerSecond = 1;
+        public static final double kMaxAccelerationMetersPerSecondSquared = .5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
     
@@ -186,8 +186,8 @@ public final class Constants {
     }
 
 
-    public static final Gains kArmGains = new Gains(.0000000005, 0, 0.005, 0.0002/*156 */, 0, 1.0);
-    public static final Gains kArmGains1 = new Gains(.000005, 0, 0.05, 0.0002/*156 */, 0, 1.0);
+    public static final Gains kArmGains = new Gains( .0000000005, 0, 0.005, 0.0002/*156 */, 0, 1.0);
+    public static final Gains kArmGains1 = new Gains(.000005, 0, .005, 0.0002/*156 */, 0, 1.0);
     public static final Gains kArmGains2 = new Gains(0, 0, 0.05, 0.0002/*156 */, 0, 1.0);
 
 
