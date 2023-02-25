@@ -39,12 +39,17 @@ public void Stop() {
 
   
 public void HopIn() {
-  m_doubleSolenoid.set(Value.kReverse);;
+  m_doubleSolenoid.set(Value.kReverse);
 }
   
 public void HopOut() {
   m_doubleSolenoid.set(Value.kForward);
 }
+
+public Value IsHopOut() {
+  return m_doubleSolenoid.get();
+}
+
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation

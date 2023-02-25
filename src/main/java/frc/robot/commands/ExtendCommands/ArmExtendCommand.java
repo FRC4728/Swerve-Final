@@ -1,6 +1,5 @@
 package frc.robot.commands.ExtendCommands;
 
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExtendingSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 

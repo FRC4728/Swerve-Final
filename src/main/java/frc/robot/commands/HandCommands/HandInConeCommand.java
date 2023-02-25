@@ -1,7 +1,6 @@
 package frc.robot.commands.HandCommands;
 
 import frc.robot.subsystems.HandSubsystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class HandInConeCommand extends CommandBase {

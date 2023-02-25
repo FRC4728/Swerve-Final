@@ -58,8 +58,8 @@ public final class CTREConfigs {
         swerveDriveAutoFXConfig.slot0.kD = Constants.Swerve.driveKD;
         swerveDriveAutoFXConfig.slot0.kF = Constants.Swerve.driveKF;        
         swerveDriveAutoFXConfig.supplyCurrLimit = driveSupplyLimit;
-        swerveDriveAutoFXConfig.openloopRamp = 0;
-        swerveDriveAutoFXConfig.closedloopRamp = 0;
+        swerveDriveAutoFXConfig.openloopRamp = Constants.Swerve.openLoopRamp;
+        swerveDriveAutoFXConfig.closedloopRamp = Constants.Swerve.closedLoopRamp;
 
         
         /* Swerve CANCoder Configuration */

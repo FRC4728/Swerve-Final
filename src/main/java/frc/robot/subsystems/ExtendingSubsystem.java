@@ -8,12 +8,18 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
      public class ExtendingSubsystem extends SubsystemBase {
         // The motors on the left side of the drive.
+
+        
+
          
         CANSparkMax m_ArmExtend = new CANSparkMax(Constants.ArmConstants.ArmExtenderID, MotorType.kBrushless);
 
@@ -72,6 +78,8 @@ import frc.robot.Constants;
             //m_ArmExtend.setSmartCurrentLimit(smartMotionSlot, smartMotionSlot, smartMotionSlot);
 
             m_ArmExtend.burnFlash();
+
+            
             
         }
 
@@ -100,6 +108,11 @@ import frc.robot.Constants;
             m_PIDControllerExtend.setReference(60, ControlType.kPosition, 0, 0, ArbFFUnits.kPercentOut);
            // m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
+        public void ExtendMid(){
+            //   resetEncoders();
+               m_PIDControllerExtend.setReference(45, ControlType.kPosition, 0, 0, ArbFFUnits.kPercentOut);
+              // m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
+           }
 
         public void Retract(){
             m_PIDControllerExtend.setReference(0, ControlType.kPosition);
@@ -107,7 +120,7 @@ import frc.robot.Constants;
         }
 
         public void ExtendToGround(){
-            m_PIDControllerExtend.setReference(52, ControlType.kPosition);
+            m_PIDControllerExtend.setReference(46.3, ControlType.kPosition);
          //   m_PIDControllerExtend.setReference(joystickButton6, ControlType.kDutyCycle);
         }
 

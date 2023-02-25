@@ -58,61 +58,53 @@ public class SwerveModule {
 
     private void setSpeed(SwerveModuleState desiredState, boolean quickTurn, boolean zoom){
      SmartDashboard.putBoolean("quickTurn", quickTurn);
-    //   if (quickTurn == false & zoom == false) {
+       if (quickTurn == false & zoom == false) {
 
         
-     //      double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
-    //        mDriveMotor.set(ControlMode.Velocity, velocity/2, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
- ///   }
- //   else if (zoom == true){
+           double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
+            mDriveMotor.set(ControlMode.Velocity, velocity/2, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
+    }
+    else if (zoom == true){
         
         double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
         mDriveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
     
- //   }
- //   else{
+    }
+    else{
         
-  //      double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
- //       mDriveMotor.set(ControlMode.Velocity, velocity/4, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
+       double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference, Constants.Swerve.driveGearRatio);
+        mDriveMotor.set(ControlMode.Velocity, velocity/4, DemandType.ArbitraryFeedForward, feedforward.calculate(desiredState.speedMetersPerSecond));
    
-   // }
+    }
     }
     private void setAngle(SwerveModuleState desiredState, boolean quickTurn, boolean zoom){
-      //  if (quickTurn == true & WheelTurnSpeed == 4000){
-     //       WheelTurnSpeed = 10000
-    //        mAngleMotor.configMotionAcceleration(10000);
-    //        mAngleMotor.configMotionCruiseVelocity(20000);
-    //    }
-    //    else if ( quickTurn = false & WheelTurnSpeed == 10000){
-    //        WheelTurnSpeed = 4000;
-            
-    //    mAngleMotor.configMotionAcceleration(2000);
-    //    mAngleMotor.configMotionCruiseVelocity(4000);
 
-     //   if (zoom == false & (Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 10000)){
-    //    RobotSpeed = Math.abs(mDriveMotor.getSelectedSensorVelocity());
-     //   if(Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 4000){
+            
+
+        if (zoom == false & (Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 10000)){
+        RobotSpeed = Math.abs(mDriveMotor.getSelectedSensorVelocity());
+        if(Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 4000){
            Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
 
            mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
            lastAngle = angle;
-     //   }
-    //    else if (quickTurn == true & Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 6000)
-  //      {
-   //         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+        }
+        else if (quickTurn == true & Math.abs(mDriveMotor.getSelectedSensorVelocity()) < 6000)
+       {
+            Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
 
-    //        mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-    //        lastAngle = angle;
-    //    }
-     //   else {
-    //      Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+            mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+            lastAngle = angle;
+        }
+       else {
+         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
-     //      mAngleMotor.set(ControlMode.MotionMagic, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-    //     lastAngle = angle;
-    //  }
-   // }
+           mAngleMotor.set(ControlMode.MotionMagic, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
+        lastAngle = angle;
+      }
+    }
     }
 
     private void setAngleAuto(SwerveModuleState desiredState){

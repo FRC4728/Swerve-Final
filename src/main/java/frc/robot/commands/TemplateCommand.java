@@ -7,15 +7,9 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TemplateCommand extends CommandBase {
-    private TemplateSubsystem m_template;
-
-    private BooleanSupplier buttonsupplier;
 
     public TemplateCommand(TemplateSubsystem m_template, BooleanSupplier buttonsupplier) {
-        this.m_template = m_template;
         addRequirements(m_template);
-
-        this.buttonsupplier = buttonsupplier;
     }
 
     public void initialize() {
@@ -24,8 +18,6 @@ public class TemplateCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // Add in command to be executed
-        boolean button = buttonsupplier.getAsBoolean();
 
     }
 

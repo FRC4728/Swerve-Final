@@ -1,24 +1,25 @@
-package frc.robot.commands.ArmCommands;
+package frc.robot.commands.PistonCommands;
 
-import frc.robot.subsystems.ArmSubsystem;
 
+import frc.robot.subsystems.PistonSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ArmPistonExtendCommand extends CommandBase {
-    private ArmSubsystem s_Arm;
+    private PistonSubsystem s_Piston;
 
 
 
-    public ArmPistonExtendCommand(ArmSubsystem s_Arm) {
-        this.s_Arm = s_Arm;
-        addRequirements(s_Arm);
+    public ArmPistonExtendCommand(PistonSubsystem s_Piston) {
+        this.s_Piston = s_Piston;
+        //addRequirements(s_Piston);
 
 
     }
 
+
     @Override
     public void execute() {
-        s_Arm.PistonArmOut();
+        s_Piston.PistonArmOut();
 
         /* Drive */
 

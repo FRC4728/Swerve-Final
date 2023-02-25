@@ -145,8 +145,7 @@ public final class Constants {
     public static final class ArmConstants{
 
 
-        //Fix These Values
-        public static final int ArmMasterID = 59;
+        public static final int ArmMasterID = 59; //Alternate Encoder
         public static final int ArmFollowerID = 60;
         public static final int ArmExtenderID = 58;
         public static final int HandMotorID = 57;
