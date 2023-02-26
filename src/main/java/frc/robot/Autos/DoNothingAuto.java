@@ -24,13 +24,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class Auto2 extends SequentialCommandGroup {
+public class DoNothingAuto extends SequentialCommandGroup {
     
 
 
-    public  Auto2(Swerve s_Swerve){
+    public  DoNothingAuto(Swerve s_Swerve){
     // Path Planner Path
-    String robot_path = "Auto2";
+    String robot_path = "DoNothing";
     PathPlannerTrajectory TestPath = PathPlanner.loadPath(robot_path, new PathConstraints(.4, .5));
 
     HashMap<String, Command> eventMap = new HashMap<>();

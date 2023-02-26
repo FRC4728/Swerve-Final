@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PhotonVisionSubsystem extends SubsystemBase {
   // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   // public static RobotPoseEstimator robotPoseEstimator;
-
+/* 
   // Location of all april tags on field, check if id is correct
 
   final AprilTag tag01 = new AprilTag(
@@ -216,7 +216,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return new Translation2d(0, 0);
   }
 
-*/
+
 
   // does everything right now, returns nothing useful
   public EstimatedRobotPose CameraGet() {
@@ -296,5 +296,5 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-  }
+  }*/
 }

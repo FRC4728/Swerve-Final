@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autos.Auto1;
-import frc.robot.Autos.Auto2;
+import frc.robot.Autos.DoNothingAuto;
 import frc.robot.commands.*;
 import frc.robot.commands.ArmCommands.ArmOverride;
 import frc.robot.commands.ArmCommands.ArmStopCommand;
@@ -151,8 +151,9 @@ public class RobotContainer {
        //     s_Arm,
         //         () ->   -driver.getRawAxis(1)));
 
-        m_chooser.setDefaultOption("Auto1", new Auto1(s_Swerve, s_Arm, s_Hand, s_Extend, s_Hopper, s_Piston));
-         m_chooser.addOption("Auto2", new Auto2(s_Swerve));
+        m_chooser.setDefaultOption("OneBallAuto", new Auto1(s_Swerve, s_Arm, s_Hand, s_Extend, s_Hopper, s_Piston));
+         m_chooser.addOption("DoNothingAuto", new DoNothingAuto(s_Swerve));
+
 
         // Put the chooser on the dashboard
         SmartDashboard.putData(m_chooser);
@@ -323,13 +324,13 @@ public class RobotContainer {
 
      public Command ToHomeCubeCommand() {
         return new SequentialCommandGroup(
-                new InstantCommand(() -> s_Arm.Stop()).withTimeout(.1),
-                new HandStopCommand(s_Hand).withTimeout(.1),
+                //new InstantCommand(() -> s_Arm.Stop()).withTimeout(.1),
+                //new HandStopCommand(s_Hand).withTimeout(.1),
                 new ParallelCommandGroup(
                         new ArmPistonRetractCommand(s_Piston).until(() -> (s_Piston.PistonArmExtended() == Value.kReverse)),
                         new ArmRetractCommand(s_Extend).until (() -> s_Extend.getEncoderExtend() < .7)),
                 new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < -2.5) & (s_Arm.getEncoderActuate() > -7.5)),
-                new ArmStopCommand(s_Arm)
+                new ArmStopCommand(s_Arm).withTimeout(.1)
         );
      };
 
@@ -337,7 +338,7 @@ public class RobotContainer {
      return new SequentialCommandGroup(
                 new ParallelCommandGroup(  
                     new ArmPistonRetractCommand(s_Piston).until(() -> (s_Piston.PistonArmExtended() == Value.kReverse)) ,
-                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3))
+                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .7))
                 ),
                 new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() < -2.5) & (s_Arm.getEncoderActuate() > -7.5)),
                 new HopperOut(s_Hopper).until (() -> (s_Hopper.HopperDown() == Value.kForward)),
@@ -353,9 +354,9 @@ public class RobotContainer {
                 return new SequentialCommandGroup(
                                 new ParallelCommandGroup(  
                                     new ArmPistonRetractCommand(s_Piston).until(() -> (s_Piston.PistonArmExtended() == Value.kReverse)) ,
-                                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .3))
+                                    new ArmRetractCommand(s_Extend).until (() -> (s_Extend.getEncoderExtend() < .7))
                                 ),
-                       new ArmToGroundCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 37) & (s_Arm.getEncoderActuate() > 36)),
+                       new ArmToGroundCommand(s_Arm).until(() -> (s_Arm.getEncoderActuate() < 36) & (s_Arm.getEncoderActuate() > 34)),
                        new ArmStopCommand(s_Arm).withTimeout(.1),
                        new ExtendToGroundCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() < 46) & (s_Extend.getEncoderExtend() >44)),
                        new HandInCubeCommand(s_Hand).until(() -> (s_Hand.getvoltageCube() == true)),
@@ -376,11 +377,11 @@ public class RobotContainer {
                                         new WaitCommand(1)      
                                 )
                         ),
-                        new HandStopCommand(s_Hand).withTimeout(.2)
-                     //   new ParallelRaceGroup(
-                    //            new ArmPistonRetractCommand(s_Piston).withTimeout(5),
-                    //            new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.7))
-                     //   ),
+                        new HandStopCommand(s_Hand).withTimeout(.2),
+                        new ParallelRaceGroup(
+                                new ArmPistonRetractCommand(s_Piston).withTimeout(1.5),
+                                new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.7))
+                        )
                         
           
                     //    new ArmToHomeCommand(s_Arm).until (() -> (s_Arm.getEncoderActuate() > -7.5) & (s_Arm.getEncoderActuate() < -2.5)),
@@ -396,7 +397,7 @@ public class RobotContainer {
                                 new WaitCommand(1)      
                         )),
                         new ParallelRaceGroup(
-                                new ArmPistonRetractCommand(s_Piston).withTimeout(5),
+                                new ArmPistonRetractCommand(s_Piston),
                                 new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <=.7))
                         ),
                         
@@ -479,7 +480,7 @@ public class RobotContainer {
     }
 
     // Teleop Ramsete Builder: creates paths and follows them
-    Command ramseteTeleopCommand(Pose2d targetPose2d) {
+  /*   Command ramseteTeleopCommand(Pose2d targetPose2d) {
         TrajectoryConfig config = new TrajectoryConfig(
                 Constants.AutoConstants.kMaxSpeedMetersPerSecond,
                 Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -491,12 +492,12 @@ public class RobotContainer {
 
         // updateangle(r, Theta, targetPose2d.getRotation());
 
-        Trajectory trajectory = newTrajectory(
-                config,
-                targetPose2d.getTranslation(),
-                new Translation2d(s_Vision.CameraGet().estimatedPose.getTranslation().getX(), s_Vision.CameraGet().estimatedPose.getTranslation().getY()),
-                s_Swerve.getYaw(),
-                targetPose2d.getRotation());
+     //  Trajectory trajectory = newTrajectory(
+       //         config,
+         //       targetPose2d.getTranslation(),
+           //     new Translation2d(s_Vision.CameraGet().estimatedPose.getTranslation().getX(), s_Vision.CameraGet().estimatedPose.getTranslation().getY()),
+             //   s_Swerve.getYaw(),
+               // targetPose2d.getRotation());
 
         var interiorQuinticWaypoints = new ArrayList<Pose2d>();
         interiorQuinticWaypoints.add(new Pose2d(0, 0, new Rotation2d(0)));
@@ -521,7 +522,7 @@ public class RobotContainer {
          * // interiorQuinticWaypoints,
          * // config);
          */
-        var thetaController = new ProfiledPIDController(
+    /*     var thetaController = new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -540,7 +541,7 @@ public class RobotContainer {
                 new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(new Translation2d(s_Vision.CameraGet().estimatedPose.getTranslation().getX(), s_Vision.CameraGet().estimatedPose.getTranslation().getY()),
                  s_Swerve.getYaw()))),
                 swerveControllerCommand);
-    }
+    }*/
 
     Command AutoTest() {
         TrajectoryConfig config = new TrajectoryConfig(

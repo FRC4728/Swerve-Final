@@ -76,21 +76,21 @@ import frc.robot.Constants;
 
         public void RunHandsInCone(){
         //try
-            m_HandController.setReference(-180, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
+            m_HandController.setReference(-250, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
 
           //  processVariable = m_encoderActuate.getVelocity();
         }
 
         public void RunHandsOutCone(){
             //try
-                m_HandController.setReference(180, CANSparkMax.ControlType.kVelocity);
+                m_HandController.setReference(250, CANSparkMax.ControlType.kVelocity);
               //  processVariable = m_encoderActuate.getVelocity();
             }
 
             
         public void RunHandsInCube(){
          //try
-             m_HandController.setReference(180, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
+             m_HandController.setReference(300, CANSparkMax.ControlType.kVelocity, 0, .0, ArbFFUnits.kPercentOut);
  
            //  processVariable = m_encoderActuate.getVelocity();
          }
@@ -124,7 +124,7 @@ import frc.robot.Constants;
 
       public boolean getvoltage(){
 
-         if (voltage > 8.75
+         if (voltage > 15
           & m_timer.get() >= 1){
            // SmartDashboard.putBoolean("true", true);
             return true;
@@ -135,7 +135,7 @@ import frc.robot.Constants;
       }
       public boolean getvoltageCube(){
 
-        if (voltage > 7.75
+        if (voltage > 9
          & m_timer.get() >= 1){
           // SmartDashboard.putBoolean("true", true);
            return true;

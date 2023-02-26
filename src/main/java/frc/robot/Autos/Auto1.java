@@ -54,16 +54,15 @@ public class Auto1 extends SequentialCommandGroup {
     PathPlannerTrajectory TestPath = PathPlanner.loadPath(robot_path, new PathConstraints(1.3, .8));
     HashMap<String, Command> eventMap = new HashMap<>();
 
-  /*   eventMap.put("ArmHigh", new SequentialCommandGroup(
+     eventMap.put("ArmHigh", new SequentialCommandGroup(
         new ArmRetractCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() <= .7)),
         new ArmHighCommand(s_Arm)
             .until(() -> (s_Arm.getEncoderActuate() > 114.5) & (s_Arm.getEncoderActuate() < 115.5)),
         new ParallelRaceGroup(
             new ArmHighHoldCommand(s_Arm),
             new ParallelCommandGroup(
-                new ArmPistonExtendCommand(s_Piston).withTimeout(1.5),
-                new ArmExtendCommand(s_Extend)
-                    .until(() -> (s_Extend.getEncoderExtend() < 62) & (s_Extend.getEncoderExtend() > 58)))),
+                new ArmPistonExtendCommand(s_Piston).withTimeout(2),
+                new ArmExtendCommand(s_Extend).until(() -> (s_Extend.getEncoderExtend() < 62) & (s_Extend.getEncoderExtend() > 58)))),
         new ParallelRaceGroup(
             new ArmHighHoldCommand(s_Arm),
             new ParallelRaceGroup(
@@ -76,7 +75,7 @@ public class Auto1 extends SequentialCommandGroup {
         new ArmToHomeCommand(s_Arm)
             .until(() -> (s_Arm.getEncoderActuate() > -7.5) & (s_Arm.getEncoderActuate() < -2.5)),
         new ArmStopCommand(s_Arm).withTimeout(.05)));
-*/
+
     // eventMap.put("IntakeArmsDown", new PrintCommand("intakeArmsDown"));
 
     // 4. Construct command to follow trajectory
