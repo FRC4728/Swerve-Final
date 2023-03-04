@@ -179,4 +179,9 @@ public class Swerve extends SubsystemBase {
         }
 
     }
+
+    public double getRoll()
+    {
+        return gyro.getRoll();
+    }
 }

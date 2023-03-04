@@ -50,6 +50,7 @@ public class Auto1 extends SequentialCommandGroup {
   public Auto1(Swerve s_Swerve, ArmSubsystem s_Arm, HandSubsystem s_Hand, ExtendingSubsystem s_Extend,
       HopperSubsystem s_Hopper, PistonSubsystem s_Piston) {
     // Path Planner Path
+    //TODO: make a change to the path too make the robot get onto the drive station
     String robot_path = "1 Ball Test";
     PathPlannerTrajectory TestPath = PathPlanner.loadPath(robot_path, new PathConstraints(1.3, .8));
     HashMap<String, Command> eventMap = new HashMap<>();
@@ -94,12 +95,22 @@ public class Auto1 extends SequentialCommandGroup {
     Command fullAuto = autobuilder.fullAuto(TestPath);
 
     // 5. Add some init and wrap-up, and return everything
+    // addCommands(
+    //     new SequentialCommandGroup(
+    //         // new InstantCommand(() ->
+    //         // swerveSubsystem.resetOdometry(TestPath.getInitialPose())),
+    //         fullAuto,
+    //         new InstantCommand(() -> s_Swerve.stopModules())));
+
+    //6. returns path and autoBalance
     addCommands(
         new SequentialCommandGroup(
             // new InstantCommand(() ->
             // swerveSubsystem.resetOdometry(TestPath.getInitialPose())),
             fullAuto,
-            new InstantCommand(() -> s_Swerve.stopModules())));
+    new AutoBalance(s_Swerve)));
+
+
 
     // new InstantCommand(() -> swerveSubsystem.getPose()));
   }
